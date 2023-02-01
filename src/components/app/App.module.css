@@ -1,0 +1,12 @@
+.main {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+    column-gap: 40px;
+    max-width: 1240px;
+    margin: auto;
+}
+
+.title {
+    grid-column: 1 / span 2;
+}
