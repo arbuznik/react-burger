@@ -3,6 +3,7 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './BurgerIngredients.module.css';
 import { getActiveCategories, categoriesNames, getIngredientsByCategory } from "../../utils/categories";
 import BurgerIngredient from "../burger-ingredient/BurgerIngredient";
+
 const BurgerIngredients = () => {
     const [currentCategory, setCurrentCategory] = React.useState('bun');
     const [activeCategories, setActiveCategories] = React.useState(getActiveCategories());
