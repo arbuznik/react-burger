@@ -1,0 +1,36 @@
+.header {
+    display: flex;
+    align-items: center;
+    height: 90px;
+    background: #1C1C21;
+}
+
+.headerContent {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    align-items: center;
+    justify-items: center;
+}
+
+.menuContainer {
+    justify-self: flex-start;
+}
+
+.menu {
+    display: flex;
+}
+
+.menuLink {
+    display: flex;
+    column-gap: 8px;
+    padding: 20px 0;
+    color: #F2F2F3;
+}
+
+.profileLink {
+    composes: menuLink;
+    justify-self: end;
+}

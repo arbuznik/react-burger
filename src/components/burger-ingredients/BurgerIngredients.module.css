@@ -1,0 +1,18 @@
+.tabs {
+    display: flex;
+}
+
+.categoriesContainer {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 290px);
+    overflow-y: scroll;
+}
+
+.ingredientsContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 24px 16px;
+    column-gap: 24px;
+    row-gap: 36px;
+}
