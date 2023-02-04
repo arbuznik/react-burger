@@ -1,14 +1,15 @@
 import React from 'react';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { mockData } from "../../utils/data";
 import styles from './BurgerConstructor.module.css';
+import PropTypes from "prop-types";
+import { ingredientType } from "../../types/prop-types";
 
-const BurgerConstructor = () => {
-    const totalPrice = mockData.reduce((sum, el) => (sum + el.price), 0);
+const BurgerConstructor = ({ ingredients }) => {
+    const totalPrice = ingredients.reduce((sum, el) => (sum + el.price), 0);
 
     return (
         <section className={styles.ingredientsContainer}>
-            {mockData.map((ingredient, index, arr) => (
+            {ingredients.map((ingredient, index, arr) => (
                 <div key={ingredient._id} className={styles.ingredientContainer}>
                     {index !== 0 && index !== arr.length - 1 && <DragIcon type={"primary"}/>}
                     <ConstructorElement
@@ -31,5 +32,9 @@ const BurgerConstructor = () => {
         </section>
     );
 };
+
+BurgerConstructor.propTypes = {
+    ingredient: PropTypes.arrayOf(ingredientType),
+}
 
 export default BurgerConstructor;
