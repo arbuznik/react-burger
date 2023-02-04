@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 520px;
+    margin: auto;
+    align-items: center;
+}
+
+.image {
+    margin-bottom: 16px;
+    width: 480px;
+}
+
+.nutritions {
+    display: flex;
+    width: 100%;
+    column-gap: 20px;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.nutrition {
+    display: flex;
+    flex-direction: column;
+    margin-top: 32px;
+    align-items: center;
+}
