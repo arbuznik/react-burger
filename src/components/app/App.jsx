@@ -7,9 +7,9 @@ import styles from "./App.module.css";
 import api from "../../utils/api";
 
 function App() {
-    const [ingredients, setIngredients] = useState([]);
+    const [ingredients, setIngredients] = useState();
 
-    useEffect( () => {
+    useEffect(() => {
         api.fetchIngredients()
             .then(data => setIngredients(data))
     }, [])
@@ -17,11 +17,12 @@ function App() {
     return (
         <>
             <AppHeader />
-            <main className={styles.main}>
-                <h1 className={styles.title + " text text_type_main-large mt-10 mb-5"}>Соберите бургер</h1>
-                <BurgerIngredients ingredients={ingredients} />
-                <BurgerConstructor ingredients={ingredients} />
-            </main>
+            {ingredients &&
+                <main className={styles.main}>
+                    <h1 className={styles.title + " text text_type_main-large mt-10 mb-5"}>Соберите бургер</h1>
+                    <BurgerIngredients ingredients={ingredients} />
+                    <BurgerConstructor ingredients={ingredients} />
+                </main>}
         </>
 
     );

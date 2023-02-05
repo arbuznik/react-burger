@@ -37,7 +37,7 @@ const BurgerIngredients = ({ ingredients }) => {
                         <h2 id={category} className="text text_type_main-medium">{categoriesNames[category]}</h2>
                         <div className={styles.ingredientsContainer}>
                             {getIngredientsByCategory(ingredients, category).map(ingredient => (
-                                <BurgerIngredient key={ingredient._id} ingredient={ingredient}/>
+                                <BurgerIngredient key={ingredient._id} ingredient={ingredient} />
                             ))}
                         </div>
                     </div>
@@ -48,7 +48,7 @@ const BurgerIngredients = ({ ingredients }) => {
 };
 
 BurgerIngredients.propTypes = {
-    ingredient: PropTypes.arrayOf(ingredientType),
+    ingredients: PropTypes.arrayOf(ingredientType).isRequired,
 }
 
 export default BurgerIngredients;
