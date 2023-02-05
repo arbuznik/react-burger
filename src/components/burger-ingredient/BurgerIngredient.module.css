@@ -5,6 +5,7 @@
     align-items: center;
     height: 208px;
     row-gap: 4px;
+    cursor: pointer;
 }
 
 .image {

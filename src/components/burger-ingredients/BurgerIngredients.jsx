@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './BurgerIngredients.module.css';
 import { getActiveCategories, categoriesNames, getIngredientsByCategory } from "../../utils/categories";
 import BurgerIngredient from "../burger-ingredient/BurgerIngredient";
+import { ingredientType } from "../../types/prop-types";
+import PropTypes from "prop-types";
 
-const BurgerIngredients = () => {
+const BurgerIngredients = ({ ingredients }) => {
     const [currentCategory, setCurrentCategory] = React.useState('bun');
-    const [activeCategories, setActiveCategories] = React.useState(getActiveCategories());
+    const [activeCategories, setActiveCategories] = React.useState([]);
+
+    useEffect(() => {
+        setActiveCategories(getActiveCategories(ingredients));
+    }, [ingredients])
 
     const handleTabClick = (category) => {
         setCurrentCategory(category);
@@ -30,8 +36,8 @@ const BurgerIngredients = () => {
                     <div key={index}>
                         <h2 id={category} className="text text_type_main-medium">{categoriesNames[category]}</h2>
                         <div className={styles.ingredientsContainer}>
-                            {getIngredientsByCategory(category).map(ingredient => (
-                                <BurgerIngredient key={ingredient._id} ingredient={ingredient}/>
+                            {getIngredientsByCategory(ingredients, category).map(ingredient => (
+                                <BurgerIngredient key={ingredient._id} ingredient={ingredient} />
                             ))}
                         </div>
                     </div>
@@ -40,5 +46,9 @@ const BurgerIngredients = () => {
         </section>
     );
 };
+
+BurgerIngredients.propTypes = {
+    ingredients: PropTypes.arrayOf(ingredientType).isRequired,
+}
 
 export default BurgerIngredients;
