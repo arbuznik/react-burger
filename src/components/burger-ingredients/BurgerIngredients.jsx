@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './BurgerIngredients.module.css';
 import { getActiveCategories, categoriesNames, getIngredientsByCategory } from "../../utils/categories";
 import BurgerIngredient from "../burger-ingredient/BurgerIngredient";
-import { ingredientType } from "../../types/prop-types";
-import PropTypes from "prop-types";
+import { IngredientsContext } from "../../utils/ingredientsContext";
 
-const BurgerIngredients = ({ ingredients }) => {
+const BurgerIngredients = () => {
+    const ingredients = useContext(IngredientsContext);
+
     const [currentCategory, setCurrentCategory] = React.useState('bun');
     const [activeCategories, setActiveCategories] = React.useState([]);
 
@@ -46,9 +47,5 @@ const BurgerIngredients = ({ ingredients }) => {
         </section>
     );
 };
-
-BurgerIngredients.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientType).isRequired,
-}
 
 export default BurgerIngredients;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AppHeader from "../app-header/AppHeader";
 import BurgerConstructor from "../burger-constructor/BurgerConstructor";
 import BurgerIngredients from "../burger-ingredients/BurgerIngredients";
-import { ConstructorContext } from '../../utils/ConstructorContext';
+import { IngredientsContext } from '../../utils/ingredientsContext';
 import styles from "./App.module.css";
 import api from "../../utils/api";
 
@@ -20,10 +20,10 @@ function App() {
             {ingredients &&
                 <main className={styles.main}>
                     <h1 className={styles.title + " text text_type_main-large mt-10 mb-5"}>Соберите бургер</h1>
-                    <BurgerIngredients ingredients={ingredients} />
-                    <ConstructorContext.Provider value={ingredients}>
+                    <IngredientsContext.Provider value={ingredients}>
+                        <BurgerIngredients />
                         <BurgerConstructor />
-                    </ConstructorContext.Provider>
+                    </IngredientsContext.Provider>
                 </main>}
         </>
 

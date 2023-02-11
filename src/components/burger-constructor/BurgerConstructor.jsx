@@ -1,19 +1,32 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './BurgerConstructor.module.css';
 import Modal from "../modal/Modal";
 import OrderDetails from "../order-details/OrderDetails";
-import { ConstructorContext } from "../../utils/ConstructorContext";
+import { IngredientsContext } from "../../utils/ingredientsContext";
 import api from "../../utils/api";
 
-const BurgerConstructor = () => {
-    const ingredients = useContext(ConstructorContext);
+const totalPriceInitialState = {
+    totalPrice: 0
+}
 
-    const [totalPrice, setTotalPrice] = useState(0);
+const totalPriceReducer = (state, action) => {
+    switch (action.type) {
+        case 'set':
+            return { totalPrice: action.payload };
+        default:
+            return totalPriceInitialState;
+    }
+}
+const BurgerConstructor = () => {
+    const ingredients = useContext(IngredientsContext);
+
     const [orderId, setOrderId] = useState(34536);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [bun, setBun] = useState('');
     const [fillings, setFillings] = useState([]);
+
+    const [totalPriceState, dispatchTotalPrice] = useReducer(totalPriceReducer, totalPriceInitialState,undefined)
 
     useEffect(() => {
         setBun(ingredients.filter(ingredient => ingredient.type === 'bun')[0])
@@ -22,7 +35,10 @@ const BurgerConstructor = () => {
     }, [ingredients])
 
     useEffect(() => {
-        setTotalPrice((fillings.reduce((sum, filling) => (sum + filling.price), 0) + bun.price * 2) || 0)
+        dispatchTotalPrice({
+            type: 'set',
+            payload: (fillings.reduce((sum, filling) => (sum + filling.price), 0) + bun.price * 2) || 0
+        })
     }, [fillings, bun])
 
     const handleClick = () => {
@@ -76,7 +92,7 @@ const BurgerConstructor = () => {
                     </div>}
 
                 <div className={styles.checkout}>
-                    <p className="text text_type_digits-medium mr-2">{totalPrice}</p>
+                    <p className="text text_type_digits-medium mr-2">{totalPriceState.totalPrice}</p>
                     <CurrencyIcon type={"primary"} />
                     <Button extraClass="ml-10" htmlType="button" type="primary" size="medium" onClick={handleClick}>
                         Оформить заказ
