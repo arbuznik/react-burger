@@ -1,28 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './BurgerConstructor.module.css';
-import PropTypes from "prop-types";
-import { ingredientType } from "../../types/prop-types";
 import Modal from "../modal/Modal";
 import OrderDetails from "../order-details/OrderDetails";
+import { ConstructorContext } from "../../utils/ConstructorContext";
+import api from "../../utils/api";
 
-const BurgerConstructor = ({ ingredients }) => {
-    const [totalPrice, setTotalPrice] = useState();
+const BurgerConstructor = () => {
+    const ingredients = useContext(ConstructorContext);
+
+    const [totalPrice, setTotalPrice] = useState(0);
     const [orderId, setOrderId] = useState(34536);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [buns, setBuns] = useState([]);
+    const [bun, setBun] = useState('');
     const [fillings, setFillings] = useState([]);
 
     useEffect(() => {
-        setBuns(ingredients.filter(ingredient => ingredient.type === 'bun'))
+        setBun(ingredients.filter(ingredient => ingredient.type === 'bun')[0])
 
         setFillings(ingredients.filter(ingredient => ingredient.type !== 'bun'))
-
-        setTotalPrice(ingredients.reduce((sum, el) => (sum + el.price), 0))
     }, [ingredients])
 
+    useEffect(() => {
+        setTotalPrice((fillings.reduce((sum, filling) => (sum + filling.price), 0) + bun.price * 2) || 0)
+    }, [fillings, bun])
+
     const handleClick = () => {
-        setIsModalVisible(true)
+        setIsModalVisible(true);
+        api.createOrder({
+            ingredients: [...fillings.map(filling => filling._id), bun._id]
+        })
+            .then(data => setOrderId(data.order.number));
     }
 
     const handleClose = () => {
@@ -32,12 +40,12 @@ const BurgerConstructor = ({ ingredients }) => {
     return (
         <>
             <section className={styles.ingredientsContainer}>
-                {buns[0] &&
+                {bun &&
                     <div className={styles.bunContainer}>
                         <ConstructorElement
-                            text={buns[0].name}
-                            thumbnail={buns[0].image}
-                            price={buns[0].price}
+                            text={bun.name}
+                            thumbnail={bun.image}
+                            price={bun.price}
                             type={'top'}
                             isLocked
                         />
@@ -56,12 +64,12 @@ const BurgerConstructor = ({ ingredients }) => {
                     ))}
                 </div>
 
-                {buns[1] &&
+                {bun &&
                     <div className={styles.bunContainer}>
                         <ConstructorElement
-                            text={buns[1].name}
-                            thumbnail={buns[1].image}
-                            price={buns[1].price}
+                            text={bun.name}
+                            thumbnail={bun.image}
+                            price={bun.price}
                             type={'bottom'}
                             isLocked
                         />
@@ -83,9 +91,5 @@ const BurgerConstructor = ({ ingredients }) => {
         </>
     );
 };
-
-BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientType).isRequired,
-}
 
 export default BurgerConstructor;
