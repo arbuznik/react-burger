@@ -4,8 +4,8 @@ import styles from './BurgerConstructor.module.css';
 import Modal from "../modal/Modal";
 import OrderDetails from "../order-details/OrderDetails";
 import { useDispatch, useSelector } from "react-redux";
-import { getIngredients } from "../../services/slices/ingredients";
 import { createOrder, getOrder } from "../../services/slices/order";
+import { addIngredient, getIngredientsConstructor } from "../../services/slices/ingredients-constructor";
 
 const totalPriceInitialState = {
     totalPrice: 0
@@ -19,9 +19,10 @@ const totalPriceReducer = (state, action) => {
             return totalPriceInitialState;
     }
 }
+
 const BurgerConstructor = () => {
     const dispatch = useDispatch();
-    const ingredients = useSelector(getIngredients);
+    const ingredients = useSelector(getIngredientsConstructor);
     const order = useSelector(getOrder);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -42,6 +43,11 @@ const BurgerConstructor = () => {
             payload: (fillings.reduce((sum, filling) => (sum + filling?.price), 0) + bun?.price * 2) || 0
         })
     }, [fillings, bun])
+
+    // TODO: remove this, adds all ingridients to constructor
+    useEffect(() => {
+        ingredients.forEach(ingredient => dispatch(addIngredient(ingredient)))
+    }, [ingredients, dispatch])
 
     const handleClick = () => {
         setIsModalVisible(true);

@@ -1,18 +1,10 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from "react-redux";
+import React from 'react';
 import AppHeader from "../app-header/AppHeader";
 import BurgerConstructor from "../burger-constructor/BurgerConstructor";
 import BurgerIngredients from "../burger-ingredients/BurgerIngredients";
 import styles from "./App.module.css";
-import { fetchIngredients } from "../../services/slices/ingredients";
 
 function App() {
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(fetchIngredients());
-    }, [dispatch])
-
     return (
         <>
             <AppHeader />
@@ -22,7 +14,6 @@ function App() {
                 <BurgerConstructor />
             </main>
         </>
-
     );
 }
 

@@ -4,16 +4,21 @@ import styles from './BurgerIngredient.module.css';
 import { ingredientType } from "../../types/prop-types";
 import Modal from "../modal/Modal";
 import IngredientDetails from "../ingredient-details/IngredientDetails";
+import { resetActiveIngredient, setActiveIngredient } from "../../services/slices/ingredient";
+import { useDispatch } from "react-redux";
 
 const BurgerIngredient = ({ ingredient }) => {
+    const dispatch = useDispatch();
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const handleClick = () => {
+        dispatch(setActiveIngredient(ingredient));
         setIsModalVisible(true)
     }
 
     const handleClose = () => {
         setIsModalVisible(false)
+        dispatch(resetActiveIngredient());
     }
 
     return (
@@ -29,7 +34,7 @@ const BurgerIngredient = ({ ingredient }) => {
             </article>
             {isModalVisible &&
                 <Modal onClose={handleClose} title="Детали ингредиента">
-                    <IngredientDetails ingredient={ingredient} />
+                    <IngredientDetails/>
                 </Modal>
             }
         </>

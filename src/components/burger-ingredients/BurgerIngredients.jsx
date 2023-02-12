@@ -3,14 +3,18 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './BurgerIngredients.module.css';
 import { getActiveCategories, categoriesNames, getIngredientsByCategory } from "../../utils/categories";
 import BurgerIngredient from "../burger-ingredient/BurgerIngredient";
-import { useSelector } from "react-redux";
-import { getIngredients } from "../../services/slices/ingredients";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchIngredients, getIngredients } from "../../services/slices/ingredients";
 
 const BurgerIngredients = () => {
+    const dispatch = useDispatch();
     const ingredients = useSelector(getIngredients);
-
     const [currentCategory, setCurrentCategory] = React.useState('bun');
     const [activeCategories, setActiveCategories] = React.useState([]);
+
+    useEffect(() => {
+        dispatch(fetchIngredients());
+    }, [dispatch])
 
     useEffect(() => {
         setActiveCategories(getActiveCategories(ingredients));
