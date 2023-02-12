@@ -27,6 +27,24 @@ const BurgerIngredients = () => {
         categoryHeader.scrollIntoView({ behavior: 'smooth' });
     }
 
+    const handleIngredientsScroll = () => {
+        const offset = 300;
+        const proximity = 100;
+
+        const categoryHeadersPos = activeCategories.map(category => {
+            return {
+                category,
+                pos: document.getElementById(category).getBoundingClientRect().y - offset
+            }
+        });
+
+        const closestToTop = categoryHeadersPos.reduce((prev, curr) => {
+            return (Math.abs(curr.pos) < Math.abs(prev.pos) && curr.pos < proximity ? curr : prev);
+        });
+
+        setCurrentCategory(closestToTop.category)
+    }
+
     return (
         <section>
             <div className={styles.tabs + ' mb-10'}>
@@ -37,7 +55,7 @@ const BurgerIngredients = () => {
                 ))}
             </div>
 
-            <div className={styles.categoriesContainer}>
+            <div onScroll={handleIngredientsScroll} className={styles.categoriesContainer}>
                 {activeCategories.map((category, index) => (
                     <div key={index}>
                         <h2 id={category} className="text text_type_main-medium">{categoriesNames[category]}</h2>
