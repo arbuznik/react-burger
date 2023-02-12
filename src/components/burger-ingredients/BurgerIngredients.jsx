@@ -1,12 +1,13 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './BurgerIngredients.module.css';
 import { getActiveCategories, categoriesNames, getIngredientsByCategory } from "../../utils/categories";
 import BurgerIngredient from "../burger-ingredient/BurgerIngredient";
-import { IngredientsContext } from "../../utils/ingredientsContext";
+import { useSelector } from "react-redux";
+import { getIngredients } from "../../services/slices/ingredients";
 
 const BurgerIngredients = () => {
-    const ingredients = useContext(IngredientsContext);
+    const ingredients = useSelector(getIngredients);
 
     const [currentCategory, setCurrentCategory] = React.useState('bun');
     const [activeCategories, setActiveCategories] = React.useState([]);

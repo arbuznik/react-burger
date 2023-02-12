@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './BurgerConstructor.module.css';
 import Modal from "../modal/Modal";
 import OrderDetails from "../order-details/OrderDetails";
-import { IngredientsContext } from "../../utils/ingredientsContext";
-import api from "../../utils/api";
+import { useDispatch, useSelector } from "react-redux";
+import { getIngredients } from "../../services/slices/ingredients";
+import { createOrder, getOrder } from "../../services/slices/order";
 
 const totalPriceInitialState = {
     totalPrice: 0
@@ -19,11 +20,12 @@ const totalPriceReducer = (state, action) => {
     }
 }
 const BurgerConstructor = () => {
-    const ingredients = useContext(IngredientsContext);
+    const dispatch = useDispatch();
+    const ingredients = useSelector(getIngredients);
+    const order = useSelector(getOrder);
 
-    const [orderId, setOrderId] = useState(34536);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [bun, setBun] = useState('');
+    const [bun, setBun] = useState({});
     const [fillings, setFillings] = useState([]);
 
     const [totalPriceState, dispatchTotalPrice] = useReducer(totalPriceReducer, totalPriceInitialState,undefined)
@@ -37,16 +39,15 @@ const BurgerConstructor = () => {
     useEffect(() => {
         dispatchTotalPrice({
             type: 'set',
-            payload: (fillings.reduce((sum, filling) => (sum + filling.price), 0) + bun.price * 2) || 0
+            payload: (fillings.reduce((sum, filling) => (sum + filling?.price), 0) + bun?.price * 2) || 0
         })
     }, [fillings, bun])
 
     const handleClick = () => {
         setIsModalVisible(true);
-        api.createOrder({
+        dispatch(createOrder({
             ingredients: [...fillings.map(filling => filling._id), bun._id]
-        })
-            .then(data => setOrderId(data.order.number));
+        }))
     }
 
     const handleClose = () => {
@@ -101,7 +102,7 @@ const BurgerConstructor = () => {
             </section>
             {isModalVisible &&
                 <Modal onClose={handleClose}>
-                    <OrderDetails orderId={orderId} />
+                    <OrderDetails orderId={order.order.number} />
                 </Modal>
             }
         </>
