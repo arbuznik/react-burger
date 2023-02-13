@@ -26,13 +26,31 @@ const ingredientsConstructorSlice = createSlice({
             state.ingredients = state.ingredients.filter(ingredient => (
                 ingredient.constructorIngredientId !== payload
             ))
+        },
+        sortIngredients: (state, { payload }) => {
+            const { dragId, hoverId } = payload;
+
+            let dragIngredientIndex;
+            const dragIngredient = state.ingredients.find((ingredient, i) => {
+                if (ingredient.constructorIngredientId === dragId) {
+                    dragIngredientIndex = i;
+                }
+                return ingredient.constructorIngredientId === dragId
+            })
+
+            const hoverIndex = state.ingredients.findIndex(ingredient => {
+                return ingredient.constructorIngredientId === hoverId
+            })
+
+            state.ingredients.splice(dragIngredientIndex, 1);
+            state.ingredients.splice(hoverIndex, 0, dragIngredient);
         }
     }
 })
 
 export default ingredientsConstructorSlice.reducer
 
-export const { addIngredient, removeIngredientById } = ingredientsConstructorSlice.actions
+export const { addIngredient, removeIngredientById, sortIngredients } = ingredientsConstructorSlice.actions
 
 export const getConstructorBun = state => state.ingredientsConstructor.ingredients.find(ingredient => ingredient.type === 'bun')
 export const getConstructorFillings = state => state.ingredientsConstructor.ingredients.filter(ingredient => ingredient.type !== 'bun')
@@ -49,5 +67,3 @@ export const getTotalPrice = state => {
 export const getCounterById = (state, id) => {
     return state.ingredientsConstructor.ingredients.filter(ingredient => ingredient._id === id).length
 }
-
-export const getIngredientsConstructor = state => state.ingredients.ingredients

@@ -67,12 +67,12 @@ const BurgerConstructor = () => {
                         </div>}
 
                     <div className={styles.fillingsContainer}>
-                        {fillings.map((filling) => (
+                        {fillings.map((filling, index) => (
                             <div
                                 key={filling.constructorIngredientId}
                                 className={styles.ingredientContainer}
                             >
-                                <BurgerConstructorFilling filling={filling} />
+                                <BurgerConstructorFilling filling={filling} index={index} />
                             </div>
                         ))}
                     </div>
