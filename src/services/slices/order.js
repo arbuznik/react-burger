@@ -24,6 +24,7 @@ const orderSlice = createSlice({
         })
         builder.addCase(createOrder.rejected, (state, { error }) => {
             console.log(error)
+            state.order = initialState.order
             state.error = error
         })
     },

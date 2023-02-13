@@ -24,6 +24,7 @@ const ingredientsSlice = createSlice({
         })
         builder.addCase(fetchIngredients.rejected, (state, { error }) => {
             console.log(error)
+            state.ingredients = initialState.ingredients
             state.error = error
         })
     },
