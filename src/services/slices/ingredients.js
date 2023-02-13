@@ -12,6 +12,7 @@ export const fetchIngredients = createAsyncThunk(
 const initialState = {
     ingredients: [],
     error: null,
+    loading: false,
 }
 
 const ingredientsSlice = createSlice({
@@ -21,11 +22,17 @@ const ingredientsSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchIngredients.fulfilled, (state, { payload }) => {
             state.ingredients = payload
+            state.loading = false
         })
         builder.addCase(fetchIngredients.rejected, (state, { error }) => {
             console.log(error)
             state.ingredients = initialState.ingredients
             state.error = error
+            state.loading = false
+        })
+        builder.addCase(fetchIngredients.pending, (state) => {
+            state.error = initialState.error
+            state.loading = true
         })
     },
 })

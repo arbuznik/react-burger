@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    ingredients: [],
+    fillings: [],
+    bun: null,
+    counters: {},
 }
 
 const ingredientsConstructorSlice = createSlice({
@@ -9,61 +11,62 @@ const ingredientsConstructorSlice = createSlice({
     initialState,
     reducers: {
         addIngredient: (state, { payload }) => {
-            const bun = state.ingredients.find(ingredient => ingredient.type === 'bun')
+            if (payload.type === 'bun') {
+                if (state.bun) {
+                    state.counters[state.bun._id] = 0
+                }
+                state.bun = payload
+                state.counters[payload._id] = 2
+            }
 
-            if (bun && payload.type === 'bun') {
-                state.ingredients = state.ingredients.filter(ingredient => (
-                    ingredient.type !== 'bun'
-                ))
-
-                state.ingredients.push(payload)
-                state.ingredients.push(payload)
-            } else {
-                state.ingredients.push(payload)
+            if (payload.type !== 'bun') {
+                state.fillings.push(payload)
+                state.counters[payload._id] = state.counters[payload._id] ? state.counters[payload._id] + 1 : 1
             }
         },
-        removeIngredientById: (state, { payload }) => {
-            state.ingredients = state.ingredients.filter(ingredient => (
-                ingredient.constructorIngredientId !== payload
+        removeFilling: (state, { payload }) => {
+            state.fillings = state.fillings.filter(filling => (
+                filling.uuid !== payload.uuid
             ))
+
+            state.counters[payload._id] = state.counters[payload._id] ? state.counters[payload._id] - 1 : 0
         },
         sortIngredients: (state, { payload }) => {
-            const { dragId, hoverId } = payload;
+            const { dragIndex, hoverIndex } = payload;
+            const dragFilling = state.fillings[dragIndex]
 
-            let dragIngredientIndex;
-            const dragIngredient = state.ingredients.find((ingredient, i) => {
-                if (ingredient.constructorIngredientId === dragId) {
-                    dragIngredientIndex = i;
-                }
-                return ingredient.constructorIngredientId === dragId
-            })
-
-            const hoverIndex = state.ingredients.findIndex(ingredient => {
-                return ingredient.constructorIngredientId === hoverId
-            })
-
-            state.ingredients.splice(dragIngredientIndex, 1);
-            state.ingredients.splice(hoverIndex, 0, dragIngredient);
+            state.fillings.splice(dragIndex, 1);
+            state.fillings.splice(hoverIndex, 0, dragFilling);
+        },
+        resetConstructor: (state) => {
+            state.fillings = initialState.fillings
+            state.counters = initialState.counters
         }
     }
 })
 
 export default ingredientsConstructorSlice.reducer
 
-export const { addIngredient, removeIngredientById, sortIngredients } = ingredientsConstructorSlice.actions
+export const { addIngredient, removeFilling, sortIngredients, resetConstructor } = ingredientsConstructorSlice.actions
 
-export const getConstructorBun = state => state.ingredientsConstructor.ingredients.find(ingredient => ingredient.type === 'bun')
-export const getConstructorFillings = state => state.ingredientsConstructor.ingredients.filter(ingredient => ingredient.type !== 'bun')
+export const getConstructorBun = state => state.ingredientsConstructor.bun
+export const getConstructorFillings = state => state.ingredientsConstructor.fillings
 export const getTotalPrice = state => {
-    if (state.ingredientsConstructor.ingredients.length > 0) {
-        return state.ingredientsConstructor.ingredients.reduce((sum, ingredient) => {
-            return sum + ingredient?.price
+    let totalPrice = 0;
+
+    if (state.ingredientsConstructor.fillings.length > 0) {
+        totalPrice += state.ingredientsConstructor.fillings.reduce((sum, filling) => {
+            return sum + filling?.price
         }, 0);
     }
 
-    return 0;
+    if (state.ingredientsConstructor.bun) {
+        totalPrice += state.ingredientsConstructor.bun.price * 2;
+    }
+
+    return totalPrice;
 }
 
 export const getCounterById = (state, id) => {
-    return state.ingredientsConstructor.ingredients.filter(ingredient => ingredient._id === id).length
+    return state.ingredientsConstructor.counters[id]
 }

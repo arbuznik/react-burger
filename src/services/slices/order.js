@@ -10,8 +10,9 @@ export const createOrder = createAsyncThunk(
 )
 
 const initialState = {
-    order: {},
+    order: null,
     error: null,
+    loading: false,
 }
 
 const orderSlice = createSlice({
@@ -21,11 +22,17 @@ const orderSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(createOrder.fulfilled, (state, { payload }) => {
             state.order = payload
+            state.loading = false
         })
         builder.addCase(createOrder.rejected, (state, { error }) => {
             console.log(error)
             state.order = initialState.order
             state.error = error
+            state.loading = false
+        })
+        builder.addCase(createOrder.pending, (state) => {
+            state.error = initialState.error
+            state.loading = true
         })
     },
 })

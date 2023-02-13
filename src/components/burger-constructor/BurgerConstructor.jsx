@@ -6,10 +6,12 @@ import OrderDetails from "../order-details/OrderDetails";
 import { useDispatch, useSelector } from "react-redux";
 import { createOrder, getOrder } from "../../services/slices/order";
 import {
-    addIngredient, getConstructorBun, getConstructorFillings, getTotalPrice } from "../../services/slices/ingredients-constructor";
+    addIngredient, getConstructorBun, getConstructorFillings, getTotalPrice, resetConstructor
+} from "../../services/slices/ingredients-constructor";
 import { useDrop } from "react-dnd";
 import { getStarterBun } from "../../services/slices/ingredients";
 import BurgerConstructorFilling from "../burger-constructor-filling/BurgerConstructorFilling";
+import { nanoid } from "@reduxjs/toolkit";
 
 const BurgerConstructor = () => {
     const dispatch = useDispatch();
@@ -30,7 +32,7 @@ const BurgerConstructor = () => {
     const handleOnDrop = (ingredient) => {
         dispatch(addIngredient({
             ...ingredient,
-            constructorIngredientId: Math.random().toString().slice(8)
+            uuid: nanoid(10),
         }))
     }
 
@@ -43,11 +45,12 @@ const BurgerConstructor = () => {
     const handleClick = () => {
         setIsModalVisible(true);
         dispatch(createOrder({
-            ingredients: [...fillings.map(filling => filling._id), bun._id]
+            ingredients: [bun._id, ...fillings.map(filling => filling._id), bun._id]
         }))
     }
 
     const handleClose = () => {
+        dispatch(resetConstructor())
         setIsModalVisible(false)
     }
 
@@ -69,7 +72,7 @@ const BurgerConstructor = () => {
                     <div className={styles.fillingsContainer}>
                         {fillings.map((filling, index) => (
                             <div
-                                key={filling.constructorIngredientId}
+                                key={filling.uuid}
                                 className={styles.ingredientContainer}
                             >
                                 <BurgerConstructorFilling filling={filling} index={index} />

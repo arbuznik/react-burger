@@ -1,7 +1,10 @@
 import React, { useRef } from 'react';
 import { ingredientType } from "../../types/prop-types";
 import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { removeIngredientById, sortIngredients } from "../../services/slices/ingredients-constructor";
+import {
+    removeFilling,
+    sortIngredients
+} from "../../services/slices/ingredients-constructor";
 import { useDispatch } from "react-redux";
 import { useDrag, useDrop } from "react-dnd";
 import styles from './BurgerConstructorFilling.module.css';
@@ -17,13 +20,10 @@ const BurgerConstructorFilling = ({ filling, index }) => {
                 return
             }
 
-            const dragId = item.id
-            const hoverId = filling.constructorIngredientId
-
             const dragIndex = item.index
             const hoverIndex = index
 
-            if (dragId === hoverId) {
+            if (dragIndex === hoverIndex) {
                 return
             }
 
@@ -41,14 +41,14 @@ const BurgerConstructorFilling = ({ filling, index }) => {
                 return
             }
 
-            dispatch(sortIngredients({ dragId, hoverId }))
+            dispatch(sortIngredients({ dragIndex, hoverIndex }))
+            item.index = hoverIndex
         },
     })
 
-    const [{ isDragging }, dragRef, dragPreview] = useDrag({
+    const [{ isDragging }, drag, dragPreview] = useDrag({
         type: 'constructorIngredient',
         item: {
-            id: filling.constructorIngredientId,
             index,
         },
         collect: (monitor) => ({
@@ -56,23 +56,22 @@ const BurgerConstructorFilling = ({ filling, index }) => {
         }),
     })
 
-    const opacity = isDragging ? 0.5 : 1;
-    drop(dragPreview(dropRef));
+    const opacity = isDragging ? 0.3 : 1;
 
-    const handleDeleteIngredient = (id) => {
-        dispatch(removeIngredientById(id))
+    drop(drag(dragPreview(dropRef)));
+
+    const handleDeleteFilling = (filling) => {
+        dispatch(removeFilling(filling))
     }
 
     return (
         <div ref={dropRef} style={{opacity}} className={styles.fillingContainer}>
-            <div ref={dragRef} className={styles.dragHandle}>
-                <DragIcon type={"primary"} />
-            </div>
+            <DragIcon type={"primary"} />
             <ConstructorElement
                 text={filling.name}
                 thumbnail={filling.image}
                 price={filling.price}
-                handleClose={() => handleDeleteIngredient(filling.constructorIngredientId)}
+                handleClose={() => handleDeleteFilling(filling)}
             />
         </div>
     );
