@@ -1,0 +1,17 @@
+.fillingContainer {
+    display: flex;
+    column-gap: 4px;
+    align-items: center;
+}
+
+.dragHandle {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    cursor: grab;
+    height: fit-content;
+}
+
+.dragHandle:active {
+    cursor: grabbing;
+}

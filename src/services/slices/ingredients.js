@@ -32,3 +32,4 @@ const ingredientsSlice = createSlice({
 export default ingredientsSlice.reducer
 
 export const getIngredients = state => state.ingredients.ingredients
+export const getStarterBun = state => state.ingredients.ingredients.find(ingredient => ingredient.type === 'bun')

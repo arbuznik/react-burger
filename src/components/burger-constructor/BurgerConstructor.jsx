@@ -1,53 +1,44 @@
-import React, { useEffect, useReducer, useState } from 'react';
-import { Button, ConstructorElement, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import React, { useEffect, useState } from 'react';
+import { Button, ConstructorElement, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './BurgerConstructor.module.css';
 import Modal from "../modal/Modal";
 import OrderDetails from "../order-details/OrderDetails";
 import { useDispatch, useSelector } from "react-redux";
 import { createOrder, getOrder } from "../../services/slices/order";
-import { addIngredient, getIngredientsConstructor } from "../../services/slices/ingredients-constructor";
-
-const totalPriceInitialState = {
-    totalPrice: 0
-}
-
-const totalPriceReducer = (state, action) => {
-    switch (action.type) {
-        case 'set':
-            return { totalPrice: action.payload };
-        default:
-            return totalPriceInitialState;
-    }
-}
+import {
+    addIngredient, getConstructorBun, getConstructorFillings, getTotalPrice } from "../../services/slices/ingredients-constructor";
+import { useDrop } from "react-dnd";
+import { getStarterBun } from "../../services/slices/ingredients";
+import BurgerConstructorFilling from "../burger-constructor-filling/BurgerConstructorFilling";
 
 const BurgerConstructor = () => {
     const dispatch = useDispatch();
-    const ingredients = useSelector(getIngredientsConstructor);
+    const starterBun = useSelector(getStarterBun);
+    const bun = useSelector(getConstructorBun);
+    const fillings = useSelector(getConstructorFillings);
     const order = useSelector(getOrder);
-
+    const totalPrice = useSelector(getTotalPrice);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [bun, setBun] = useState({});
-    const [fillings, setFillings] = useState([]);
 
-    const [totalPriceState, dispatchTotalPrice] = useReducer(totalPriceReducer, totalPriceInitialState,undefined)
+    const [, dropTargetRef] = useDrop({
+        accept: 'ingredient',
+        drop(ingredient) {
+            handleOnDrop(ingredient);
+        },
+    })
+
+    const handleOnDrop = (ingredient) => {
+        dispatch(addIngredient({
+            ...ingredient,
+            constructorIngredientId: Math.random().toString().slice(8)
+        }))
+    }
 
     useEffect(() => {
-        setBun(ingredients.filter(ingredient => ingredient.type === 'bun')[0])
-
-        setFillings(ingredients.filter(ingredient => ingredient.type !== 'bun'))
-    }, [ingredients])
-
-    useEffect(() => {
-        dispatchTotalPrice({
-            type: 'set',
-            payload: (fillings.reduce((sum, filling) => (sum + filling?.price), 0) + bun?.price * 2) || 0
-        })
-    }, [fillings, bun])
-
-    // TODO: remove this, adds all ingridients to constructor
-    useEffect(() => {
-        ingredients.forEach(ingredient => dispatch(addIngredient(ingredient)))
-    }, [ingredients, dispatch])
+        if (starterBun) {
+            dispatch(addIngredient(starterBun))
+        }
+    }, [starterBun, dispatch])
 
     const handleClick = () => {
         setIsModalVisible(true);
@@ -62,51 +53,51 @@ const BurgerConstructor = () => {
 
     return (
         <>
-            <section className={styles.ingredientsContainer}>
-                {bun &&
-                    <div className={styles.bunContainer}>
-                        <ConstructorElement
-                            text={bun.name}
-                            thumbnail={bun.image}
-                            price={bun.price}
-                            type={'top'}
-                            isLocked
-                        />
-                    </div>}
-
-                <div className={styles.fillingsContainer}>
-                    {fillings.map((filling) => (
-                        <div key={filling._id} className={styles.ingredientContainer}>
-                            <DragIcon type={"primary"}/>
+            <section className={styles.constructorContainer}>
+                <div ref={dropTargetRef} className={styles.ingredientsContainer}>
+                    {bun &&
+                        <div className={styles.bunContainer}>
                             <ConstructorElement
-                                text={filling.name}
-                                thumbnail={filling.image}
-                                price={filling.price}
+                                text={bun.name}
+                                thumbnail={bun.image}
+                                price={bun.price}
+                                type={'top'}
+                                isLocked
                             />
-                        </div>
-                    ))}
+                        </div>}
+
+                    <div className={styles.fillingsContainer}>
+                        {fillings.map((filling) => (
+                            <div
+                                key={filling.constructorIngredientId}
+                                className={styles.ingredientContainer}
+                            >
+                                <BurgerConstructorFilling filling={filling} />
+                            </div>
+                        ))}
+                    </div>
+
+                    {bun &&
+                        <div className={styles.bunContainer}>
+                            <ConstructorElement
+                                text={bun.name}
+                                thumbnail={bun.image}
+                                price={bun.price}
+                                type={'bottom'}
+                                isLocked
+                            />
+                        </div>}
                 </div>
 
-                {bun &&
-                    <div className={styles.bunContainer}>
-                        <ConstructorElement
-                            text={bun.name}
-                            thumbnail={bun.image}
-                            price={bun.price}
-                            type={'bottom'}
-                            isLocked
-                        />
-                    </div>}
-
                 <div className={styles.checkout}>
-                    <p className="text text_type_digits-medium mr-2">{totalPriceState.totalPrice}</p>
+                    <p className="text text_type_digits-medium mr-2">{totalPrice}</p>
                     <CurrencyIcon type={"primary"} />
                     <Button extraClass="ml-10" htmlType="button" type="primary" size="medium" onClick={handleClick}>
                         Оформить заказ
                     </Button>
                 </div>
             </section>
-            {isModalVisible &&
+            {isModalVisible && order?.order?.number &&
                 <Modal onClose={handleClose}>
                     <OrderDetails orderId={order.order.number} />
                 </Modal>
