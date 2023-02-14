@@ -1,0 +1,10 @@
+.fillingContainer {
+    display: flex;
+    column-gap: 4px;
+    align-items: center;
+    cursor: grab;
+}
+
+.fillingContainer:active {
+    cursor: grabbing;
+}

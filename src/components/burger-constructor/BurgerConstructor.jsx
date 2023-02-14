@@ -1,71 +1,96 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ConstructorElement, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Button, ConstructorElement, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './BurgerConstructor.module.css';
-import PropTypes from "prop-types";
-import { ingredientType } from "../../types/prop-types";
 import Modal from "../modal/Modal";
 import OrderDetails from "../order-details/OrderDetails";
+import { useDispatch, useSelector } from "react-redux";
+import { createOrder, getOrder } from "../../services/slices/order";
+import {
+    addIngredient, getConstructorBun, getConstructorFillings, getTotalPrice, resetConstructor
+} from "../../services/slices/ingredients-constructor";
+import { useDrop } from "react-dnd";
+import { getStarterBun } from "../../services/slices/ingredients";
+import BurgerConstructorFilling from "../burger-constructor-filling/BurgerConstructorFilling";
+import { nanoid } from "@reduxjs/toolkit";
 
-const BurgerConstructor = ({ ingredients }) => {
-    const [totalPrice, setTotalPrice] = useState();
-    const [orderId, setOrderId] = useState(34536);
+const BurgerConstructor = () => {
+    const dispatch = useDispatch();
+    const starterBun = useSelector(getStarterBun);
+    const bun = useSelector(getConstructorBun);
+    const fillings = useSelector(getConstructorFillings);
+    const order = useSelector(getOrder);
+    const totalPrice = useSelector(getTotalPrice);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [buns, setBuns] = useState([]);
-    const [fillings, setFillings] = useState([]);
+
+    const [, dropTargetRef] = useDrop({
+        accept: 'ingredient',
+        drop(ingredient) {
+            handleOnDrop(ingredient);
+        },
+    })
+
+    const handleOnDrop = (ingredient) => {
+        dispatch(addIngredient({
+            ...ingredient,
+            uuid: nanoid(10),
+        }))
+    }
 
     useEffect(() => {
-        setBuns(ingredients.filter(ingredient => ingredient.type === 'bun'))
-
-        setFillings(ingredients.filter(ingredient => ingredient.type !== 'bun'))
-
-        setTotalPrice(ingredients.reduce((sum, el) => (sum + el.price), 0))
-    }, [ingredients])
+        if (starterBun) {
+            dispatch(addIngredient(starterBun))
+        }
+    }, [starterBun, dispatch])
 
     const handleClick = () => {
-        setIsModalVisible(true)
+        setIsModalVisible(true);
+        dispatch(createOrder({
+            ingredients: [bun._id, ...fillings.map(filling => filling._id), bun._id]
+        }))
     }
 
     const handleClose = () => {
+        dispatch(resetConstructor())
         setIsModalVisible(false)
     }
 
     return (
         <>
-            <section className={styles.ingredientsContainer}>
-                {buns[0] &&
-                    <div className={styles.bunContainer}>
-                        <ConstructorElement
-                            text={buns[0].name}
-                            thumbnail={buns[0].image}
-                            price={buns[0].price}
-                            type={'top'}
-                            isLocked
-                        />
-                    </div>}
-
-                <div className={styles.fillingsContainer}>
-                    {fillings.map((filling) => (
-                        <div key={filling._id} className={styles.ingredientContainer}>
-                            <DragIcon type={"primary"}/>
+            <section className={styles.constructorContainer}>
+                <div ref={dropTargetRef} className={styles.ingredientsContainer}>
+                    {bun &&
+                        <div className={styles.bunContainer}>
                             <ConstructorElement
-                                text={filling.name}
-                                thumbnail={filling.image}
-                                price={filling.price}
+                                text={bun.name}
+                                thumbnail={bun.image}
+                                price={bun.price}
+                                type={'top'}
+                                isLocked
                             />
-                        </div>
-                    ))}
-                </div>
+                        </div>}
 
-                {buns[1] &&
-                    <div className={styles.bunContainer}>
-                        <ConstructorElement
-                            text={buns[1].name}
-                            thumbnail={buns[1].image}
-                            price={buns[1].price}
-                            type={'bottom'}
-                            isLocked
-                        />
-                    </div>}
+                    <div className={styles.fillingsContainer}>
+                        {fillings.map((filling, index) => (
+                            <div
+                                key={filling.uuid}
+                                className={styles.ingredientContainer}
+                            >
+                                <BurgerConstructorFilling filling={filling} index={index} />
+                            </div>
+                        ))}
+                    </div>
+
+                    {bun &&
+                        <div className={styles.bunContainer}>
+                            <ConstructorElement
+                                text={bun.name}
+                                thumbnail={bun.image}
+                                price={bun.price}
+                                type={'bottom'}
+                                isLocked
+                            />
+                        </div>}
+                </div>
 
                 <div className={styles.checkout}>
                     <p className="text text_type_digits-medium mr-2">{totalPrice}</p>
@@ -75,17 +100,13 @@ const BurgerConstructor = ({ ingredients }) => {
                     </Button>
                 </div>
             </section>
-            {isModalVisible &&
+            {isModalVisible && order?.order?.number &&
                 <Modal onClose={handleClose}>
-                    <OrderDetails orderId={orderId} />
+                    <OrderDetails orderId={order.order.number} />
                 </Modal>
             }
         </>
     );
 };
-
-BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientType).isRequired,
-}
 
 export default BurgerConstructor;

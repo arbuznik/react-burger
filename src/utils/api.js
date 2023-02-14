@@ -6,10 +6,20 @@ class Api {
     }
 
     fetchIngredients() {
-        return fetch(this.endpoint)
+        return fetch(this.endpoint + 'ingredients')
             .then(res => this._handleApiResponse(res))
             .then(data => data.data)
-            .catch(err => this._handleError(err))
+    }
+
+    createOrder(ingredients) {
+        return fetch(this.endpoint + 'orders', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(ingredients)
+        })
+            .then(res => this._handleApiResponse(res))
     }
 
     _handleApiResponse(res) {
@@ -17,10 +27,6 @@ class Api {
             return res.json();
         }
         return Promise.reject(`Ошибка: ${res.status}`);
-    }
-
-    _handleError(err) {
-        console.log(err)
     }
 }
 
