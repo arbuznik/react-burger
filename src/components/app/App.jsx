@@ -1,23 +1,21 @@
 import React from 'react';
-import AppHeader from "../app-header/AppHeader";
-import BurgerConstructor from "../burger-constructor/BurgerConstructor";
-import BurgerIngredients from "../burger-ingredients/BurgerIngredients";
-import styles from "./App.module.css";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import HomePage from "../../pages/home/HomePage";
+import Layout from "../layout/Layout";
+import LoginPage from "../../pages/login/LoginPage";
+import RegisterPage from "../../pages/register/RegisterPage";
 
 function App() {
     return (
-        <>
-            <AppHeader />
-            <DndProvider backend={HTML5Backend}>
-                <main className={styles.main}>
-                    <h1 className={styles.title + " text text_type_main-large mt-10 mb-5"}>Соберите бургер</h1>
-                    <BurgerIngredients />
-                    <BurgerConstructor />
-                </main>
-            </DndProvider>
-        </>
+        <BrowserRouter>
+            <Routes>
+                <Route path='/' element={<Layout />}>
+                    <Route path='/' element={<HomePage />} />
+                    <Route path='/login' element={<LoginPage />} />
+                    <Route path='/register' element={<RegisterPage />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
     );
 }
 

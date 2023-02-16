@@ -8,6 +8,16 @@ a {
     text-decoration: none;
 }
 
+.text-link {
+    text-decoration: none;
+    color: #4C4CFF;
+    transition: color .3s ease-in;
+}
+
+.text-link:hover {
+    color: white;
+}
+
 ::-webkit-scrollbar {
     width: 8px;
     height: 80%;
