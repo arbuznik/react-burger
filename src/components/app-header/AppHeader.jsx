@@ -28,7 +28,9 @@ const AppHeader = () => {
             </li>
           </ul>
         </nav>
-        <Logo />
+        <Link to="/">
+          <Logo />
+        </Link>
         <Link to="/profile" className={styles.profileLink}>
           <ProfileIcon type={"primary"} />
           <p className="text text_type_main-default">Личный кабинет</p>

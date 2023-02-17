@@ -7,6 +7,8 @@ import RegisterPage from "../../pages/register/RegisterPage";
 import ForgotPasswordPage from "../../pages/forgot-password/ForgotPasswordPage";
 import ResetPasswordPage from "../../pages/reset-password/ResetPasswordPage";
 import ProfilePage from "../../pages/profile/ProfilePage";
+import IngredientPage from "../../pages/ingredient/IngredientPage";
+import NotFoundPage from "../../pages/not-found/NotFoundPage";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/ingredient/:id" element={<IngredientPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
