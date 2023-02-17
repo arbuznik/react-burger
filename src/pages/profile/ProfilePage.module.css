@@ -1,0 +1,21 @@
+.main {
+    display: grid;
+    grid-template-columns: 1fr 480px 1fr;
+    margin: 180px auto 0;
+    width: 1260px;
+    padding: 0 10px;
+    column-gap: 60px;
+}
+
+.profileLink {
+    display: flex;
+    align-items: center;
+    height: 64px;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+}

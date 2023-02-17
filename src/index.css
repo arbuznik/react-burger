@@ -18,6 +18,20 @@ a {
     color: white;
 }
 
+.menu-link_active {
+    transition: color .3s ease-in;
+    color: white;
+}
+
+.menu-link_inactive {
+    color: #8585AD;
+    transition: color .3s ease-in;
+}
+
+.menu-link_inactive:hover {
+    color: white;
+}
+
 ::-webkit-scrollbar {
     width: 8px;
     height: 80%;
