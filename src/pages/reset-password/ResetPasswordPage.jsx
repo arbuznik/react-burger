@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Input,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
 import api from "../../utils/api";
 import styles from "./ResetPasswordPage.module.css";
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { values, handleChange } = useForm();
   const { password = "", token = "" } = values;
+
+  useEffect(() => {
+    if (!location.state.fromResetPassword) {
+      navigate("/");
+    }
+  });
 
   const handleSubmit = () => {
     api.resetPasswordWithToken(password, token).then((data) => {

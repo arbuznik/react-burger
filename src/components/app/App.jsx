@@ -12,6 +12,7 @@ import NotFoundPage from "../../pages/not-found/NotFoundPage";
 import { getCurrentUser, getUser } from "../../services/slices/user";
 import { useDispatch, useSelector } from "react-redux";
 import jsCookie from "js-cookie";
+import ProtectedRoute from "../protected-route/ProtectedRoute";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,11 +29,30 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route
+            path="/profile"
+            element={<ProtectedRoute element={<ProfilePage />} />}
+          />
+          <Route
+            path="/login"
+            element={<ProtectedRoute onlyUnAuth element={<LoginPage />} />}
+          />
+          <Route
+            path="/register"
+            element={<ProtectedRoute onlyUnAuth element={<RegisterPage />} />}
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <ProtectedRoute onlyUnAuth element={<ForgotPasswordPage />} />
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <ProtectedRoute onlyUnAuth element={<ResetPasswordPage />} />
+            }
+          />
           <Route path="/ingredient/:id" element={<IngredientPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>

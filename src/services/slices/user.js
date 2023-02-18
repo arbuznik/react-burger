@@ -168,3 +168,4 @@ const userSlice = createSlice({
 export default userSlice.reducer;
 
 export const getCurrentUser = (state) => state.user.user;
+export const isUserLoading = (state) => state.user.loading;

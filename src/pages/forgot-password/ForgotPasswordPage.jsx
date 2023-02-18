@@ -16,7 +16,12 @@ const ForgotPasswordPage = () => {
   const handleSubmit = () => {
     api.resetPassword(email).then((data) => {
       if (data.success) {
-        navigate("/reset-password", { replace: true });
+        navigate("/reset-password", {
+          state: {
+            fromResetPassword: true,
+          },
+          replace: true,
+        });
       }
     });
   };

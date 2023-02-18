@@ -1,27 +1,19 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Button,
   EmailInput,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./LoginPage.module.css";
 import { useForm } from "../../hooks/useForm";
-import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUser, loginUser } from "../../services/slices/user";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../services/slices/user";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
-  const user = useSelector(getCurrentUser);
-  const navigate = useNavigate();
   const { values, handleChange } = useForm();
   const { email = "", password = "" } = values;
-
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user, navigate]);
 
   const handleSubmit = () => {
     dispatch(loginUser(values));
