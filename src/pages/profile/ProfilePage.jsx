@@ -1,15 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
+  Button,
   Input,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { NavLink } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
+import clsx from "clsx";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getCurrentUser,
+  logoutUser,
+  updateUser,
+} from "../../services/slices/user";
 import styles from "./ProfilePage.module.css";
 
 const ProfilePage = () => {
-  const { values, handleChange } = useForm();
-  const { name = "", login = "", password = "" } = values;
+  const dispatch = useDispatch();
+  const user = useSelector(getCurrentUser);
+  const { values, handleChange, setStartingValues } = useForm();
+  let { name = "", email = "", password = "" } = values;
+
+  useEffect(() => {
+    if (user) {
+      setStartingValues(user);
+    }
+  }, [user, setStartingValues]);
+
+  const linkClassName = ({ isActive }) => {
+    return clsx(
+      "text text_type_main-medium",
+      isActive ? "menu-link_active" : "menu-link_inactive"
+    );
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  };
+
+  const handleReset = () => {
+    if (user) {
+      setStartingValues(user);
+    }
+  };
+
+  const handleSubmit = () => {
+    dispatch(updateUser(values));
+  };
 
   return (
     <main className={styles.main}>
@@ -17,40 +54,22 @@ const ProfilePage = () => {
         <nav>
           <ul>
             <li className={styles.profileLink}>
-              <NavLink
-                to="/profile"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text text_type_main-medium menu-link_active"
-                    : "text text_type_main-medium menu-link_inactive"
-                }
-              >
+              <NavLink to="/profile" className={linkClassName}>
                 Профиль
               </NavLink>
             </li>
             <li className={styles.profileLink}>
-              <NavLink
-                to="/orders"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text text_type_main-medium menu-link_active"
-                    : "text text_type_main-medium menu-link_inactive"
-                }
-              >
+              <NavLink to="orders" className={linkClassName}>
                 История заказов
               </NavLink>
             </li>
             <li className={styles.profileLink}>
-              <NavLink
-                to="/logout"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text text_type_main-medium menu-link_active"
-                    : "text text_type_main-medium menu-link_inactive"
-                }
+              <button
+                className={clsx(styles.button, "text text_type_main-medium")}
+                onClick={handleLogout}
               >
                 Выход
-              </NavLink>
+              </button>
             </li>
           </ul>
         </nav>
@@ -66,8 +85,8 @@ const ProfilePage = () => {
           onChange={handleChange}
         />
         <Input
-          value={login}
-          name="login"
+          value={email}
+          name="email"
           placeholder="Логин"
           onChange={handleChange}
         />
@@ -76,6 +95,14 @@ const ProfilePage = () => {
           name="password"
           onChange={handleChange}
         />
+        <div className={styles.buttons}>
+          <Button onClick={handleReset} htmlType="reset" type="secondary">
+            Отмена
+          </Button>
+          <Button onClick={handleSubmit} htmlType="submit">
+            Сохранить
+          </Button>
+        </div>
       </div>
     </main>
   );

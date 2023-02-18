@@ -4,13 +4,23 @@ import {
   Input,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
+import api from "../../utils/api";
 import styles from "./ResetPasswordPage.module.css";
 
 const ResetPasswordPage = () => {
+  const navigate = useNavigate();
   const { values, handleChange } = useForm();
-  const { password = "", code = "" } = values;
+  const { password = "", token = "" } = values;
+
+  const handleSubmit = () => {
+    api.resetPasswordWithToken(password, token).then((data) => {
+      if (data.success) {
+        navigate("/login", { replace: true });
+      }
+    });
+  };
 
   return (
     <div>
@@ -23,12 +33,16 @@ const ResetPasswordPage = () => {
           onChange={handleChange}
         />
         <Input
-          value={code}
-          name="code"
+          value={token}
+          name="token"
           placeholder="Введите код из письма"
           onChange={handleChange}
         />
-        <Button htmlType="submit" extraClass={styles.button}>
+        <Button
+          htmlType="submit"
+          extraClass={styles.button}
+          onClick={handleSubmit}
+        >
           Сохранить
         </Button>
         <p className={"text text_type_main-default text_color_inactive mt-15"}>

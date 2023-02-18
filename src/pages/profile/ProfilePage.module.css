@@ -19,3 +19,21 @@
     gap: 24px;
     align-items: center;
 }
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    align-self: end;
+}
+
+.button {
+    background: #131316;
+    border: 0;
+    color: #8585AD;
+    cursor: pointer;
+    transition: color 0.3s ease-in;
+}
+
+.button:hover {
+    color: white;
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "../../pages/home/HomePage";
 import Layout from "../layout/Layout";
@@ -9,8 +9,20 @@ import ResetPasswordPage from "../../pages/reset-password/ResetPasswordPage";
 import ProfilePage from "../../pages/profile/ProfilePage";
 import IngredientPage from "../../pages/ingredient/IngredientPage";
 import NotFoundPage from "../../pages/not-found/NotFoundPage";
+import { getCurrentUser, getUser } from "../../services/slices/user";
+import { useDispatch, useSelector } from "react-redux";
+import jsCookie from "js-cookie";
 
 function App() {
+  const dispatch = useDispatch();
+  const user = useSelector(getCurrentUser);
+
+  useEffect(() => {
+    if (!user && jsCookie.get("refreshToken")) {
+      dispatch(getUser());
+    }
+  }, [user, dispatch]);
+
   return (
     <BrowserRouter>
       <Routes>
