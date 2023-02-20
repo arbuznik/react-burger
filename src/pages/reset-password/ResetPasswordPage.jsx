@@ -22,7 +22,7 @@ const ResetPasswordPage = () => {
   const { password = "", token = "" } = values;
 
   useEffect(() => {
-    if (!location.state.fromResetPassword) {
+    if (!location?.state?.fromResetPassword) {
       navigate("/");
     }
   });
