@@ -79,7 +79,7 @@ const ProfilePage = () => {
           В этом разделе вы можете изменить свои персональные данные
         </p>
       </div>
-      <div className={styles.inputs}>
+      <form className={styles.form}>
         <Input
           value={name}
           name="name"
@@ -110,7 +110,7 @@ const ProfilePage = () => {
             Сохранить
           </Button>
         </div>
-      </div>
+      </form>
     </main>
   );
 };

@@ -36,24 +36,27 @@ const ForgotPasswordPage = () => {
     <div>
       <main className={styles.main}>
         <h1 className="text text_type_main-medium">Восстановление пароля</h1>
-        <EmailInput
-          value={email}
-          name="email"
-          placeholder="Укажите e-mail"
-          onChange={handleChange}
-        />
-        {error && (
-          <p className="text text_type_main-default text_color_error">
-            {error.message}
-          </p>
-        )}
-        <Button
-          htmlType="submit"
-          extraClass={styles.button}
-          onClick={handleSubmit}
-        >
-          Восстановить
-        </Button>
+        <form className={styles.form}>
+          <EmailInput
+            autoFocus
+            value={email}
+            name="email"
+            placeholder="Укажите e-mail"
+            onChange={handleChange}
+          />
+          {error && (
+            <p className="text text_type_main-default text_color_error">
+              {error.message}
+            </p>
+          )}
+          <Button
+            htmlType="submit"
+            extraClass={styles.button}
+            onClick={handleSubmit}
+          >
+            Восстановить
+          </Button>
+        </form>
         <p className={"text text_type_main-default text_color_inactive mt-15"}>
           Вспомнили пароль?
           <Link to="/login" className="text-link ml-2">

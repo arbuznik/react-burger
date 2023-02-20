@@ -36,26 +36,33 @@ const RegisterPage = () => {
   return (
     <main className={styles.main}>
       <h1 className="text text_type_main-medium">Регистрация</h1>
-      <Input
-        value={name}
-        name="name"
-        onChange={handleChange}
-        placeholder="Имя"
-      />
-      <EmailInput value={email} name="email" onChange={handleChange} />
-      <PasswordInput value={password} name="password" onChange={handleChange} />
-      {error && (
-        <p className="text text_type_main-default text_color_error">
-          {error.message}
-        </p>
-      )}
-      <Button
-        htmlType="submit"
-        onClick={handleSubmit}
-        extraClass={styles.button}
-      >
-        Зарегистрироваться
-      </Button>
+      <form className={styles.form}>
+        <Input
+          autoFocus
+          value={name}
+          name="name"
+          onChange={handleChange}
+          placeholder="Имя"
+        />
+        <EmailInput value={email} name="email" onChange={handleChange} />
+        <PasswordInput
+          value={password}
+          name="password"
+          onChange={handleChange}
+        />
+        {error && (
+          <p className="text text_type_main-default text_color_error">
+            {error.message}
+          </p>
+        )}
+        <Button
+          htmlType="submit"
+          onClick={handleSubmit}
+          extraClass={styles.button}
+        >
+          Зарегистрироваться
+        </Button>
+      </form>
       <p className={"text text_type_main-default text_color_inactive mt-15"}>
         Уже зарегистрированы?
         <Link to="/login" className="text-link ml-2">

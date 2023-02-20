@@ -23,20 +23,31 @@ const LoginPage = () => {
   return (
     <main className={styles.main}>
       <h1 className="text text_type_main-medium">Вход</h1>
-      <EmailInput value={email} name="email" onChange={handleChange} />
-      <PasswordInput value={password} name="password" onChange={handleChange} />
-      {error && (
-        <p className="text text_type_main-default text_color_error">
-          {error.message}
-        </p>
-      )}
-      <Button
-        htmlType="submit"
-        onClick={handleSubmit}
-        extraClass={styles.button}
-      >
-        Войти
-      </Button>
+      <form className={styles.form}>
+        <EmailInput
+          autoFocus
+          value={email}
+          name="email"
+          onChange={handleChange}
+        />
+        <PasswordInput
+          value={password}
+          name="password"
+          onChange={handleChange}
+        />
+        {error && (
+          <p className="text text_type_main-default text_color_error">
+            {error.message}
+          </p>
+        )}
+        <Button
+          htmlType="submit"
+          onClick={handleSubmit}
+          extraClass={styles.button}
+        >
+          Войти
+        </Button>
+      </form>
       <div className={styles.links}>
         <p className="text text_type_main-default text_color_inactive">
           Вы — новый пользователь?

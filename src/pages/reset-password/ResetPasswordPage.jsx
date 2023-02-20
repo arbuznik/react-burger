@@ -39,30 +39,33 @@ const ResetPasswordPage = () => {
     <div>
       <main className={styles.main}>
         <h1 className="text text_type_main-medium">Восстановление пароля</h1>
-        <PasswordInput
-          value={password}
-          name="password"
-          placeholder="Введите новый пароль"
-          onChange={handleChange}
-        />
-        <Input
-          value={token}
-          name="token"
-          placeholder="Введите код из письма"
-          onChange={handleChange}
-        />
-        {error && (
-          <p className="text text_type_main-default text_color_error">
-            {error.message}
-          </p>
-        )}
-        <Button
-          htmlType="submit"
-          extraClass={styles.button}
-          onClick={handleSubmit}
-        >
-          Сохранить
-        </Button>
+        <form className={styles.form}>
+          <PasswordInput
+            autoFocus
+            value={password}
+            name="password"
+            placeholder="Введите новый пароль"
+            onChange={handleChange}
+          />
+          <Input
+            value={token}
+            name="token"
+            placeholder="Введите код из письма"
+            onChange={handleChange}
+          />
+          {error && (
+            <p className="text text_type_main-default text_color_error">
+              {error.message}
+            </p>
+          )}
+          <Button
+            htmlType="submit"
+            extraClass={styles.button}
+            onClick={handleSubmit}
+          >
+            Сохранить
+          </Button>
+        </form>
         <p className={"text text_type_main-default text_color_inactive mt-15"}>
           Вспомнили пароль?
           <Link to="/login" className="text-link ml-2">
