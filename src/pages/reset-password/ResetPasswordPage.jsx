@@ -28,7 +28,7 @@ const ResetPasswordPage = () => {
   });
 
   const handleSubmit = () => {
-    dispatch(resetPassword(password, token)).then(({ payload }) => {
+    dispatch(resetPassword({ password, token })).then(({ payload }) => {
       if (payload?.success) {
         navigate("/login", { replace: true });
       }
@@ -39,7 +39,7 @@ const ResetPasswordPage = () => {
     <div>
       <main className={styles.main}>
         <h1 className="text text_type_main-medium">Восстановление пароля</h1>
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           <PasswordInput
             autoFocus
             value={password}
@@ -58,11 +58,7 @@ const ResetPasswordPage = () => {
               {error.message}
             </p>
           )}
-          <Button
-            htmlType="submit"
-            extraClass={styles.button}
-            onClick={handleSubmit}
-          >
+          <Button htmlType="submit" extraClass={styles.button}>
             Сохранить
           </Button>
         </form>

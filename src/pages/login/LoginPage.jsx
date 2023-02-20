@@ -23,7 +23,7 @@ const LoginPage = () => {
   return (
     <main className={styles.main}>
       <h1 className="text text_type_main-medium">Вход</h1>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <EmailInput
           autoFocus
           value={email}
@@ -40,11 +40,7 @@ const LoginPage = () => {
             {error.message}
           </p>
         )}
-        <Button
-          htmlType="submit"
-          onClick={handleSubmit}
-          extraClass={styles.button}
-        >
+        <Button htmlType="submit" extraClass={styles.button}>
           Войти
         </Button>
       </form>

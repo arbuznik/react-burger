@@ -10,7 +10,6 @@ import ProfilePage from "../../pages/profile/ProfilePage";
 import NotFoundPage from "../../pages/not-found/NotFoundPage";
 import { getCurrentUser, getUser } from "../../services/slices/user";
 import { useDispatch, useSelector } from "react-redux";
-import jsCookie from "js-cookie";
 import ProtectedRoute from "../protected-route/ProtectedRoute";
 import IngredientDetails from "../ingredient-details/IngredientDetails";
 import Modal from "../modal/Modal";
@@ -20,11 +19,11 @@ function App() {
   const dispatch = useDispatch();
   const user = useSelector(getCurrentUser);
   const navigate = useNavigate();
-  let location = useLocation();
-  let state = location.state;
+  const location = useLocation();
+  const state = location.state;
 
   useEffect(() => {
-    if (!user && jsCookie.get("refreshToken")) {
+    if (!user) {
       dispatch(getUser());
     }
   }, [user, dispatch]);

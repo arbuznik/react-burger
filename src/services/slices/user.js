@@ -28,6 +28,9 @@ export const updateUser = createAsyncThunk("user/updateUser", async (data) => {
 });
 
 export const getUser = createAsyncThunk("user/getUser", async () => {
+  if (!jsCookie.get("accessToken") && !jsCookie.get("refreshToken")) {
+    return Promise.reject({ message: "No token" });
+  }
   return api.fetchWithRefresh(api.getUser);
 });
 
@@ -50,7 +53,7 @@ export const forgotPassword = createAsyncThunk(
 
 export const resetPassword = createAsyncThunk(
   "user/resetPassword",
-  async (password, token) => {
+  async ({ password, token }) => {
     return api.resetPasswordWithToken(password, token);
   }
 );
@@ -65,6 +68,7 @@ const initialState = {
   forgotPasswordError: null,
   resetPasswordError: null,
   loading: false,
+  authChecked: false,
 };
 
 const userSlice = createSlice({
@@ -74,11 +78,13 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(registerUser.fulfilled, (state, { payload }) => {
       state.user = payload.user;
+      state.authChecked = true;
       state.loading = false;
     });
     builder.addCase(registerUser.rejected, (state, { error }) => {
       console.log(error);
       state.user = initialState.user;
+      state.authChecked = true;
       state.registerError = error;
       state.loading = false;
     });
@@ -88,11 +94,13 @@ const userSlice = createSlice({
     });
     builder.addCase(loginUser.fulfilled, (state, { payload }) => {
       state.user = payload.user;
+      state.authChecked = true;
       state.loading = false;
     });
     builder.addCase(loginUser.rejected, (state, { error }) => {
       console.log(error);
       state.user = initialState.user;
+      state.authChecked = true;
       state.loginError = error;
       state.loading = false;
     });
@@ -117,12 +125,14 @@ const userSlice = createSlice({
     });
     builder.addCase(getUser.fulfilled, (state, { payload }) => {
       state.loading = false;
+      state.authChecked = true;
       if (payload.success) {
         state.user = payload.user;
       }
     });
     builder.addCase(getUser.rejected, (state, { error }) => {
       console.log(error);
+      state.authChecked = true;
       state.error = error;
       state.loading = false;
     });
@@ -183,3 +193,4 @@ export const getLogoutError = (state) => state.user.logoutError;
 export const getUpdateUserError = (state) => state.user.updateUserError;
 export const getForgotPasswordError = (state) => state.user.forgotPasswordError;
 export const getResetPasswordError = (state) => state.user.resetPasswordError;
+export const getAuthChecked = (state) => state.user.authChecked;

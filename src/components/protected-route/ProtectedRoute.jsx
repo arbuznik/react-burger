@@ -1,31 +1,33 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { getCurrentUser, isUserLoading } from "../../services/slices/user";
-import { useNavigate } from "react-router-dom";
+import {
+  getAuthChecked,
+  getCurrentUser,
+  isUserLoading,
+} from "../../services/slices/user";
+import { Navigate } from "react-router-dom";
 import styles from "./ProtectedRoute.module.css";
 import Loader from "../loader/Loader";
 
 const ProtectedRoute = ({ onlyUnAuth, element }) => {
-  const navigate = useNavigate();
   const user = useSelector(getCurrentUser);
   const isLoading = useSelector(isUserLoading);
+  const authChecked = useSelector(getAuthChecked);
 
-  useEffect(() => {
-    if (!user && !isLoading && !onlyUnAuth) {
-      navigate("/login");
-    }
-
-    if (user && onlyUnAuth) {
-      navigate("/");
-    }
-  }, [user, navigate, isLoading, onlyUnAuth]);
-
-  if (isLoading) {
+  if (!authChecked || isLoading) {
     return (
       <main className={styles.main}>
         <Loader />
       </main>
     );
+  }
+
+  if (user && onlyUnAuth) {
+    return <Navigate to="/" />;
+  }
+
+  if (!user && !onlyUnAuth) {
+    return <Navigate to="/login" />;
   }
 
   return element;

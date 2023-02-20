@@ -81,7 +81,7 @@ const ProfilePage = () => {
           В этом разделе вы можете изменить свои персональные данные
         </p>
       </div>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <Input
           value={name}
           name="name"
@@ -109,9 +109,7 @@ const ProfilePage = () => {
             <Button onClick={handleReset} htmlType="reset" type="secondary">
               Отмена
             </Button>
-            <Button onClick={handleSubmit} htmlType="submit">
-              Сохранить
-            </Button>
+            <Button htmlType="submit">Сохранить</Button>
           </div>
         )}
       </form>

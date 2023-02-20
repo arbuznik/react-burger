@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Button,
   EmailInput,
@@ -8,35 +8,30 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
 import styles from "./RegisterPage.module.css";
-import {
-  getCurrentUser,
-  getRegisterError,
-  registerUser,
-} from "../../services/slices/user";
+import { getRegisterError, registerUser } from "../../services/slices/user";
 import { useDispatch, useSelector } from "react-redux";
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
-  const error = useSelector(getRegisterError);
-  const user = useSelector(getCurrentUser);
   const navigate = useNavigate();
+  const error = useSelector(getRegisterError);
   const { values, handleChange } = useForm();
   const { name = "", email = "", password = "" } = values;
 
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user, navigate]);
-
   const handleSubmit = () => {
-    dispatch(registerUser(values));
+    dispatch(registerUser(values)).then(({ payload }) => {
+      if (payload?.success) {
+        navigate("/", {
+          replace: true,
+        });
+      }
+    });
   };
 
   return (
     <main className={styles.main}>
       <h1 className="text text_type_main-medium">Регистрация</h1>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <Input
           autoFocus
           value={name}
@@ -55,11 +50,7 @@ const RegisterPage = () => {
             {error.message}
           </p>
         )}
-        <Button
-          htmlType="submit"
-          onClick={handleSubmit}
-          extraClass={styles.button}
-        >
+        <Button htmlType="submit" extraClass={styles.button}>
           Зарегистрироваться
         </Button>
       </form>

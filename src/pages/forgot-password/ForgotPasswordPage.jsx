@@ -20,7 +20,7 @@ const ForgotPasswordPage = () => {
   const { email = "" } = values;
 
   const handleSubmit = () => {
-    dispatch(forgotPassword()).then(({ payload }) => {
+    dispatch(forgotPassword(email)).then(({ payload }) => {
       if (payload?.success) {
         navigate("/reset-password", {
           state: {
@@ -36,7 +36,7 @@ const ForgotPasswordPage = () => {
     <div>
       <main className={styles.main}>
         <h1 className="text text_type_main-medium">Восстановление пароля</h1>
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           <EmailInput
             autoFocus
             value={email}
@@ -49,11 +49,7 @@ const ForgotPasswordPage = () => {
               {error.message}
             </p>
           )}
-          <Button
-            htmlType="submit"
-            extraClass={styles.button}
-            onClick={handleSubmit}
-          >
+          <Button htmlType="submit" extraClass={styles.button}>
             Восстановить
           </Button>
         </form>
