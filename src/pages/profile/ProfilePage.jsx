@@ -10,6 +10,7 @@ import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getCurrentUser,
+  getUpdateUserError,
   logoutUser,
   updateUser,
 } from "../../services/slices/user";
@@ -17,6 +18,7 @@ import styles from "./ProfilePage.module.css";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
+  const error = useSelector(getUpdateUserError);
   const user = useSelector(getCurrentUser);
   const { values, handleChange, setStartingValues } = useForm();
   let { name = "", email = "", password = "" } = values;
@@ -95,6 +97,11 @@ const ProfilePage = () => {
           name="password"
           onChange={handleChange}
         />
+        {error && (
+          <p className="text text_type_main-default text_color_error">
+            {error.message}
+          </p>
+        )}
         <div className={styles.buttons}>
           <Button onClick={handleReset} htmlType="reset" type="secondary">
             Отмена

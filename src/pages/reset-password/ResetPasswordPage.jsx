@@ -6,12 +6,18 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
-import api from "../../utils/api";
 import styles from "./ResetPasswordPage.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getResetPasswordError,
+  resetPassword,
+} from "../../services/slices/user";
 
 const ResetPasswordPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const error = useSelector(getResetPasswordError);
   const { values, handleChange } = useForm();
   const { password = "", token = "" } = values;
 
@@ -22,8 +28,8 @@ const ResetPasswordPage = () => {
   });
 
   const handleSubmit = () => {
-    api.resetPasswordWithToken(password, token).then((data) => {
-      if (data.success) {
+    dispatch(resetPassword(password, token)).then(({ payload }) => {
+      if (payload?.success) {
         navigate("/login", { replace: true });
       }
     });
@@ -45,6 +51,11 @@ const ResetPasswordPage = () => {
           placeholder="Введите код из письма"
           onChange={handleChange}
         />
+        {error && (
+          <p className="text text_type_main-default text_color_error">
+            {error.message}
+          </p>
+        )}
         <Button
           htmlType="submit"
           extraClass={styles.button}

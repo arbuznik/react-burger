@@ -7,11 +7,12 @@ import {
 import { Link } from "react-router-dom";
 import styles from "./LoginPage.module.css";
 import { useForm } from "../../hooks/useForm";
-import { useDispatch } from "react-redux";
-import { loginUser } from "../../services/slices/user";
+import { useDispatch, useSelector } from "react-redux";
+import { getLoginError, loginUser } from "../../services/slices/user";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+  const error = useSelector(getLoginError);
   const { values, handleChange } = useForm();
   const { email = "", password = "" } = values;
 
@@ -24,6 +25,11 @@ const LoginPage = () => {
       <h1 className="text text_type_main-medium">Вход</h1>
       <EmailInput value={email} name="email" onChange={handleChange} />
       <PasswordInput value={password} name="password" onChange={handleChange} />
+      {error && (
+        <p className="text text_type_main-default text_color_error">
+          {error.message}
+        </p>
+      )}
       <Button
         htmlType="submit"
         onClick={handleSubmit}

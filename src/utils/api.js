@@ -4,6 +4,8 @@ import jsCookie from "js-cookie";
 class Api {
   constructor(endpoint) {
     this.endpoint = endpoint;
+    this.getUser = this.getUser.bind(this);
+    this.updateUser = this.updateUser.bind(this);
   }
 
   fetchIngredients() {
@@ -74,26 +76,26 @@ class Api {
     }).then((res) => this._handleApiResponse(res));
   }
 
-  refreshToken(token) {
+  refreshToken() {
     return fetch(this.endpoint + "auth/token", {
       headers: {
         "Content-Type": "application/json",
       },
       method: "POST",
       body: JSON.stringify({
-        token,
+        token: jsCookie.get("refreshToken"),
       }),
     }).then((res) => this._handleApiResponse(res));
   }
 
-  logoutUser(token) {
+  logoutUser() {
     return fetch(this.endpoint + "auth/logout", {
       headers: {
         "Content-Type": "application/json",
       },
       method: "POST",
       body: JSON.stringify({
-        token,
+        token: jsCookie.get("refreshToken"),
       }),
     }).then((res) => this._handleApiResponse(res));
   }
@@ -124,11 +126,39 @@ class Api {
   }
 
   _handleApiResponse(res) {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
+    return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
   }
+
+  fetchWithRefresh = async (func, data) => {
+    try {
+      return await func(data);
+    } catch (err) {
+      if (err.message === "jwt expired" || err.message === "jwt malformed") {
+        const refreshData = await this.refreshToken();
+
+        if (!refreshData.success) {
+          return Promise.reject(refreshData);
+        }
+
+        this.setCookiesFromResponse(refreshData);
+        return await func(data);
+      } else {
+        return Promise.reject(err);
+      }
+    }
+  };
+
+  setCookiesFromResponse = (res) => {
+    const { accessToken, refreshToken } = res;
+
+    if (accessToken) {
+      jsCookie.set("accessToken", accessToken.substring(7), { expires: 1 });
+    }
+
+    if (refreshToken) {
+      jsCookie.set("refreshToken", refreshToken, { expires: 30 });
+    }
+  };
 }
 
 const api = new Api(API_ENDPOINT);

@@ -25,8 +25,10 @@ const BurgerIngredients = () => {
   const categoryRefs = activeCategories.map(createRef);
 
   useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
+    if (!ingredients.length) {
+      dispatch(fetchIngredients());
+    }
+  }, [dispatch, ingredients]);
 
   useEffect(() => {
     setActiveCategories(getActiveCategories(ingredients));

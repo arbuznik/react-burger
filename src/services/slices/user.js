@@ -2,25 +2,13 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../utils/api";
 import jsCookie from "js-cookie";
 
-const setCookiesFromResponse = (res) => {
-  const { accessToken, refreshToken } = res;
-
-  if (accessToken) {
-    jsCookie.set("accessToken", accessToken.substring(7), { expires: 1 });
-  }
-
-  if (refreshToken) {
-    jsCookie.set("refreshToken", refreshToken, { expires: 30 });
-  }
-};
-
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (data) => {
     const result = await api.registerUser(data);
 
     if (result.success) {
-      setCookiesFromResponse(result);
+      api.setCookiesFromResponse(result);
     }
     return result;
   }
@@ -30,24 +18,21 @@ export const loginUser = createAsyncThunk("user/loginUser", async (data) => {
   const result = await api.loginUser(data);
 
   if (result.success) {
-    setCookiesFromResponse(result);
+    api.setCookiesFromResponse(result);
   }
   return result;
 });
 
 export const updateUser = createAsyncThunk("user/updateUser", async (data) => {
-  const result = await api.updateUser(data);
-  return result;
+  return api.fetchWithRefresh(api.updateUser, data);
 });
 
 export const getUser = createAsyncThunk("user/getUser", async () => {
-  const result = await api.getUser();
-  return result;
+  return api.fetchWithRefresh(api.getUser);
 });
 
 export const logoutUser = createAsyncThunk("user/logoutUser", async () => {
-  const refreshToken = jsCookie.get("refreshToken");
-  const result = await api.logoutUser(refreshToken);
+  const result = await api.logoutUser();
 
   if (result.success) {
     jsCookie.remove("refreshToken");
@@ -56,19 +41,29 @@ export const logoutUser = createAsyncThunk("user/logoutUser", async () => {
   return result;
 });
 
-export const refreshToken = createAsyncThunk("user/refreshToken", async () => {
-  const refreshToken = jsCookie.get("refreshToken");
-  const result = await api.refreshToken(refreshToken);
-
-  if (result.success) {
-    setCookiesFromResponse(result);
+export const forgotPassword = createAsyncThunk(
+  "user/forgotPassword",
+  async (email) => {
+    return api.resetPassword(email);
   }
-  return result;
-});
+);
+
+export const resetPassword = createAsyncThunk(
+  "user/resetPassword",
+  async (password, token) => {
+    return api.resetPasswordWithToken(password, token);
+  }
+);
 
 const initialState = {
   user: null,
   error: null,
+  loginError: null,
+  registerError: null,
+  logoutError: null,
+  updateUserError: null,
+  forgotPasswordError: null,
+  resetPasswordError: null,
   loading: false,
 };
 
@@ -84,11 +79,11 @@ const userSlice = createSlice({
     builder.addCase(registerUser.rejected, (state, { error }) => {
       console.log(error);
       state.user = initialState.user;
-      state.error = error;
+      state.registerError = error;
       state.loading = false;
     });
     builder.addCase(registerUser.pending, (state) => {
-      state.error = initialState.error;
+      state.registerError = initialState.registerError;
       state.loading = true;
     });
     builder.addCase(loginUser.fulfilled, (state, { payload }) => {
@@ -98,23 +93,11 @@ const userSlice = createSlice({
     builder.addCase(loginUser.rejected, (state, { error }) => {
       console.log(error);
       state.user = initialState.user;
-      state.error = error;
+      state.loginError = error;
       state.loading = false;
     });
     builder.addCase(loginUser.pending, (state) => {
-      state.error = initialState.error;
-      state.loading = true;
-    });
-    builder.addCase(refreshToken.fulfilled, (state) => {
-      state.loading = false;
-    });
-    builder.addCase(refreshToken.rejected, (state, { error }) => {
-      console.log(error);
-      state.error = error;
-      state.loading = false;
-    });
-    builder.addCase(refreshToken.pending, (state) => {
-      state.error = initialState.error;
+      state.loginError = initialState.loginError;
       state.loading = true;
     });
     builder.addCase(logoutUser.fulfilled, (state, { payload }) => {
@@ -125,11 +108,11 @@ const userSlice = createSlice({
     });
     builder.addCase(logoutUser.rejected, (state, { error }) => {
       console.log(error);
-      state.error = error;
+      state.logoutError = error;
       state.loading = false;
     });
     builder.addCase(logoutUser.pending, (state) => {
-      state.error = initialState.error;
+      state.logoutError = initialState.logoutError;
       state.loading = true;
     });
     builder.addCase(getUser.fulfilled, (state, { payload }) => {
@@ -155,11 +138,35 @@ const userSlice = createSlice({
     });
     builder.addCase(updateUser.rejected, (state, { error }) => {
       console.log(error);
-      state.error = error;
+      state.updateUserError = error;
       state.loading = false;
     });
     builder.addCase(updateUser.pending, (state) => {
-      state.error = initialState.error;
+      state.updateUserError = initialState.updateUserError;
+      state.loading = true;
+    });
+    builder.addCase(forgotPassword.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(forgotPassword.rejected, (state, { error }) => {
+      console.log(error);
+      state.forgotPasswordError = error;
+      state.loading = false;
+    });
+    builder.addCase(forgotPassword.pending, (state) => {
+      state.forgotPasswordError = initialState.forgotPasswordError;
+      state.loading = true;
+    });
+    builder.addCase(resetPassword.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(resetPassword.rejected, (state, { error }) => {
+      console.log(error);
+      state.resetPasswordError = error;
+      state.loading = false;
+    });
+    builder.addCase(resetPassword.pending, (state) => {
+      state.resetPasswordError = initialState.resetPasswordError;
       state.loading = true;
     });
   },
@@ -169,3 +176,10 @@ export default userSlice.reducer;
 
 export const getCurrentUser = (state) => state.user.user;
 export const isUserLoading = (state) => state.user.loading;
+export const getUserError = (state) => state.user.error;
+export const getLoginError = (state) => state.user.loginError;
+export const getRegisterError = (state) => state.user.registerError;
+export const getLogoutError = (state) => state.user.logoutError;
+export const getUpdateUserError = (state) => state.user.updateUserError;
+export const getForgotPasswordError = (state) => state.user.forgotPasswordError;
+export const getResetPasswordError = (state) => state.user.resetPasswordError;
