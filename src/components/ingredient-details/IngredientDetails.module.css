@@ -4,6 +4,11 @@
     width: 520px;
     margin: auto;
     align-items: center;
+    justify-content: center;
+}
+
+.containerOutsideModal {
+    height: calc(100vh - 90px);
 }
 
 .image {

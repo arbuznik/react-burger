@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import HomePage from "../../pages/home/HomePage";
 import Layout from "../layout/Layout";
 import LoginPage from "../../pages/login/LoginPage";
@@ -7,16 +7,21 @@ import RegisterPage from "../../pages/register/RegisterPage";
 import ForgotPasswordPage from "../../pages/forgot-password/ForgotPasswordPage";
 import ResetPasswordPage from "../../pages/reset-password/ResetPasswordPage";
 import ProfilePage from "../../pages/profile/ProfilePage";
-import IngredientPage from "../../pages/ingredient/IngredientPage";
 import NotFoundPage from "../../pages/not-found/NotFoundPage";
 import { getCurrentUser, getUser } from "../../services/slices/user";
 import { useDispatch, useSelector } from "react-redux";
 import jsCookie from "js-cookie";
 import ProtectedRoute from "../protected-route/ProtectedRoute";
+import IngredientDetails from "../ingredient-details/IngredientDetails";
+import Modal from "../modal/Modal";
+import { resetActiveIngredient } from "../../services/slices/ingredient";
 
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(getCurrentUser);
+  const navigate = useNavigate();
+  let location = useLocation();
+  let state = location.state;
 
   useEffect(() => {
     if (!user && jsCookie.get("refreshToken")) {
@@ -24,9 +29,14 @@ function App() {
     }
   }, [user, dispatch]);
 
+  const handleClose = () => {
+    navigate(-1);
+    dispatch(resetActiveIngredient());
+  };
+
   return (
-    <BrowserRouter>
-      <Routes>
+    <>
+      <Routes location={state?.backgroundLocation || location}>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           <Route
@@ -53,11 +63,27 @@ function App() {
               <ProtectedRoute onlyUnAuth element={<ResetPasswordPage />} />
             }
           />
-          <Route path="/ingredient/:id" element={<IngredientPage />} />
+          <Route
+            path="/ingredients/:id"
+            element={<IngredientDetails outsideModal />}
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+
+      {state?.backgroundLocation && (
+        <Routes>
+          <Route
+            path="/ingredients/:id"
+            element={
+              <Modal onClose={handleClose} title="Детали ингредиента">
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+    </>
   );
 }
 

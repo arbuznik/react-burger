@@ -8,6 +8,11 @@ a {
     text-decoration: none;
 }
 
+#root {
+    display: flex;
+    flex-direction: column;
+}
+
 .text-link {
     text-decoration: none;
     color: #4C4CFF;

@@ -12,9 +12,11 @@ import {
   fetchIngredients,
   getIngredients,
 } from "../../services/slices/ingredients";
+import { Link, useLocation } from "react-router-dom";
 
 const BurgerIngredients = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const ingredients = useSelector(getIngredients);
   const [currentCategory, setCurrentCategory] = React.useState("bun");
   const [activeCategories, setActiveCategories] = React.useState([]);
@@ -93,10 +95,14 @@ const BurgerIngredients = () => {
             <div className={styles.ingredientsContainer}>
               {getIngredientsByCategory(ingredients, category).map(
                 (ingredient) => (
-                  <BurgerIngredient
+                  <Link
+                    className={styles.link}
                     key={ingredient._id}
-                    ingredient={ingredient}
-                  />
+                    to={`/ingredients/${ingredient._id}`}
+                    state={{ backgroundLocation: location }}
+                  >
+                    <BurgerIngredient ingredient={ingredient} />
+                  </Link>
                 )
               )}
             </div>
