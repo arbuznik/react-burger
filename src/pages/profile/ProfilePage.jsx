@@ -23,6 +23,8 @@ const ProfilePage = () => {
   const { values, handleChange, setStartingValues } = useForm();
   let { name = "", email = "", password = "" } = values;
 
+  const isEditMode = user?.name !== name || user?.email !== email || password;
+
   useEffect(() => {
     if (user) {
       setStartingValues(user);
@@ -102,14 +104,16 @@ const ProfilePage = () => {
             {error.message}
           </p>
         )}
-        <div className={styles.buttons}>
-          <Button onClick={handleReset} htmlType="reset" type="secondary">
-            Отмена
-          </Button>
-          <Button onClick={handleSubmit} htmlType="submit">
-            Сохранить
-          </Button>
-        </div>
+        {isEditMode && (
+          <div className={styles.buttons}>
+            <Button onClick={handleReset} htmlType="reset" type="secondary">
+              Отмена
+            </Button>
+            <Button onClick={handleSubmit} htmlType="submit">
+              Сохранить
+            </Button>
+          </div>
+        )}
       </form>
     </main>
   );
