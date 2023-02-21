@@ -101,17 +101,17 @@ class Api {
   }
 
   getUser() {
-    return fetch(this.endpoint + "auth/user", {
+    return this._fetchWithRefresh(this.endpoint + "auth/user", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + jsCookie.get("accessToken"),
       },
       method: "GET",
-    }).then((res) => this._handleApiResponse(res));
+    });
   }
 
   updateUser({ name, email, password }) {
-    return fetch(this.endpoint + "auth/user", {
+    return this._fetchWithRefresh(this.endpoint + "auth/user", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + jsCookie.get("accessToken"),
@@ -122,16 +122,17 @@ class Api {
         email,
         password,
       }),
-    }).then((res) => this._handleApiResponse(res));
+    });
   }
 
   _handleApiResponse(res) {
     return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
   }
 
-  fetchWithRefresh = async (func, data) => {
+  _fetchWithRefresh = async (url, options) => {
     try {
-      return await func(data);
+      const res = await fetch(url, options);
+      return await this._handleApiResponse(res);
     } catch (err) {
       if (err.message === "jwt expired" || err.message === "jwt malformed") {
         const refreshData = await this.refreshToken();
@@ -141,7 +142,10 @@ class Api {
         }
 
         this.setCookiesFromResponse(refreshData);
-        return await func(data);
+        options.headers.Authorization = refreshData?.accessToken;
+
+        const res = await fetch(url, options);
+        return await this._handleApiResponse(res);
       } else {
         return Promise.reject(err);
       }

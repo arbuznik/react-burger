@@ -24,14 +24,14 @@ export const loginUser = createAsyncThunk("user/loginUser", async (data) => {
 });
 
 export const updateUser = createAsyncThunk("user/updateUser", async (data) => {
-  return api.fetchWithRefresh(api.updateUser, data);
+  return api.updateUser(data);
 });
 
 export const getUser = createAsyncThunk("user/getUser", async () => {
   if (!jsCookie.get("accessToken") && !jsCookie.get("refreshToken")) {
     return Promise.reject({ message: "No token" });
   }
-  return api.fetchWithRefresh(api.getUser);
+  return api.getUser();
 });
 
 export const logoutUser = createAsyncThunk("user/logoutUser", async () => {
