@@ -8,6 +8,35 @@ a {
     text-decoration: none;
 }
 
+#root {
+    display: flex;
+    flex-direction: column;
+}
+
+.text-link {
+    text-decoration: none;
+    color: #4C4CFF;
+    transition: color .3s ease-in;
+}
+
+.text-link:hover {
+    color: white;
+}
+
+.menu-link_active {
+    transition: color .3s ease-in;
+    color: white;
+}
+
+.menu-link_inactive {
+    color: #8585AD;
+    transition: color .3s ease-in;
+}
+
+.menu-link_inactive:hover {
+    color: white;
+}
+
 ::-webkit-scrollbar {
     width: 8px;
     height: 80%;
