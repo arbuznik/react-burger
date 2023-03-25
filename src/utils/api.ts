@@ -2,7 +2,7 @@ import { API_ENDPOINT } from "./constants";
 import jsCookie from "js-cookie";
 import {
   IIngredient,
-  IOrder,
+  IOrderResponse,
   IUserFullCredentials,
   IUserLoginCredentials,
   IUserAuthStatusResponse,
@@ -16,7 +16,7 @@ import {
 interface IApi {
   readonly endpoint: string;
   fetchIngredients: () => Promise<IIngredient[]>;
-  createOrder: (ingredients: ICreateOrderPayload) => Promise<IOrder>;
+  createOrder: (ingredients: ICreateOrderPayload) => Promise<IOrderResponse>;
   resetPassword: (email: string) => Promise<IUserAuthStatusResponse>;
   resetPasswordWithToken: (
     password: string,
@@ -56,7 +56,7 @@ class Api implements IApi {
       .then((data) => data.data);
   }
 
-  createOrder(ingredients: ICreateOrderPayload): Promise<IOrder> {
+  createOrder(ingredients: ICreateOrderPayload): Promise<IOrderResponse> {
     return fetch(this.endpoint + "orders", {
       headers: {
         "Content-Type": "application/json",

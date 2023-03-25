@@ -14,10 +14,17 @@ import IngredientDetails from "../ingredient-details/IngredientDetails";
 import Modal from "../modal/Modal";
 import { resetActiveIngredient } from "../../services/slices/ingredient";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import Feed from "../../pages/feed/feed";
+import OrdersPage from "../../pages/orders/OrdersPage";
+import {
+  fetchIngredients,
+  getIngredients,
+} from "../../services/slices/ingredients";
 
 export const App: FC = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(getCurrentUser);
+  const ingredients = useAppSelector(getIngredients);
   const navigate = useNavigate();
   const location = useLocation();
   const state = location.state;
@@ -27,6 +34,12 @@ export const App: FC = () => {
       dispatch(getUser());
     }
   }, [user, dispatch]);
+
+  useEffect(() => {
+    if (!ingredients.length) {
+      dispatch(fetchIngredients());
+    }
+  }, [dispatch, ingredients]);
 
   const handleClose = () => {
     navigate(-1);
@@ -41,6 +54,10 @@ export const App: FC = () => {
           <Route
             path="/profile"
             element={<ProtectedRoute element={<ProfilePage />} />}
+          ></Route>
+          <Route
+            path="/profile/orders"
+            element={<ProtectedRoute element={<OrdersPage />} />}
           />
           <Route
             path="/login"
@@ -62,6 +79,7 @@ export const App: FC = () => {
               <ProtectedRoute onlyUnAuth element={<ResetPasswordPage />} />
             }
           />
+          <Route path="/feed" element={<ProtectedRoute element={<Feed />} />} />
           <Route
             path="/ingredients/:id"
             element={<IngredientDetails outsideModal />}

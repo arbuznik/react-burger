@@ -1,0 +1,17 @@
+.profileLink {
+    display: flex;
+    align-items: center;
+    height: 64px;
+}
+
+.button {
+    background: #131316;
+    border: 0;
+    color: #8585AD;
+    cursor: pointer;
+    transition: color 0.3s ease-in;
+}
+
+.button:hover {
+    color: white;
+}

@@ -35,7 +35,7 @@ export interface IUserLoginCredentials {
   password: string;
 }
 
-export interface IOrder {
+export interface IOrderResponse {
   success: boolean;
   name: string;
   order: {
@@ -92,4 +92,21 @@ export interface IPasswordResetPayload {
 
 export interface ICreateOrderPayload {
   ingredients: string[];
+}
+
+export interface IOrder {
+  _id: string;
+  ingredients: string[];
+  status: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
+}
+
+export interface IFeedResponse {
+  success: boolean;
+  orders: IOrder[];
+  total: number;
+  totalToday: number;
 }

@@ -5,17 +5,13 @@ import {
   getActiveCategories,
   categoriesNames,
   getIngredientsByCategory,
-} from "../../utils/categories";
+} from "../../utils/helpers";
 import BurgerIngredient from "../burger-ingredient/BurgerIngredient";
-import {
-  fetchIngredients,
-  getIngredients,
-} from "../../services/slices/ingredients";
+import { getIngredients } from "../../services/slices/ingredients";
 import { Link, useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppSelector } from "../../hooks/hooks";
 
 const BurgerIngredients: FC = () => {
-  const dispatch = useAppDispatch();
   const location = useLocation();
   const ingredients = useAppSelector(getIngredients);
   const [currentCategory, setCurrentCategory] = React.useState<string>("bun");
@@ -23,12 +19,6 @@ const BurgerIngredients: FC = () => {
 
   const scrollAreaRef = useRef<HTMLElement>(null);
   const categoryRefs = activeCategories.map(createRef<HTMLHeadingElement>);
-
-  useEffect(() => {
-    if (!ingredients.length) {
-      dispatch(fetchIngredients());
-    }
-  }, [dispatch, ingredients]);
 
   useEffect(() => {
     setActiveCategories(getActiveCategories(ingredients));

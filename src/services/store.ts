@@ -4,6 +4,7 @@ import orderReducer from "./slices/order";
 import ingredientReducer from "./slices/ingredient";
 import ingredientsConstructorReducer from "./slices/ingredients-constructor";
 import userReducer from "./slices/user";
+import feedReducer from "./slices/feed";
 
 const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   ingredient: ingredientReducer,
   ingredientsConstructor: ingredientsConstructorReducer,
   user: userReducer,
+  feed: feedReducer,
 });
 export const store = configureStore({
   reducer: rootReducer,

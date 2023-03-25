@@ -4,18 +4,16 @@ import {
   Input,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { NavLink } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
-import clsx from "clsx";
 import {
   getCurrentUser,
   getUpdateUserError,
-  logoutUser,
   updateUser,
 } from "../../services/slices/user";
 import styles from "./ProfilePage.module.css";
 import { IUserFullCredentials } from "../../types/types";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import ProfileMenu from "../../components/profile-menu/ProfileMenu";
 
 const initialState: IUserFullCredentials = {
   name: "",
@@ -42,17 +40,6 @@ const ProfilePage: FC = () => {
     }
   }, [user, setValues]);
 
-  const linkClassName = ({ isActive }: { isActive: boolean }) => {
-    return clsx(
-      "text text_type_main-medium",
-      isActive ? "menu-link_active" : "menu-link_inactive"
-    );
-  };
-
-  const handleLogout = () => {
-    dispatch(logoutUser());
-  };
-
   const handleReset = () => {
     if (user) {
       setValues({
@@ -69,28 +56,7 @@ const ProfilePage: FC = () => {
   return (
     <main className={styles.main}>
       <div>
-        <nav>
-          <ul>
-            <li className={styles.profileLink}>
-              <NavLink to="/profile" className={linkClassName}>
-                Профиль
-              </NavLink>
-            </li>
-            <li className={styles.profileLink}>
-              <NavLink to="orders" className={linkClassName}>
-                История заказов
-              </NavLink>
-            </li>
-            <li className={styles.profileLink}>
-              <button
-                className={clsx(styles.button, "text text_type_main-medium")}
-                onClick={handleLogout}
-              >
-                Выход
-              </button>
-            </li>
-          </ul>
-        </nav>
+        <ProfileMenu />
         <p className="text text_type_main-default text_color_inactive mt-20">
           В этом разделе вы можете изменить свои персональные данные
         </p>

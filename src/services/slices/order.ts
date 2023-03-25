@@ -5,7 +5,7 @@ import {
   SerializedError,
 } from "@reduxjs/toolkit";
 import api from "../../utils/api";
-import { ICreateOrderPayload, IOrder } from "../../types/types";
+import { ICreateOrderPayload, IOrderResponse } from "../../types/types";
 import { RootState } from "../store";
 
 export const createOrder = createAsyncThunk(
@@ -16,7 +16,7 @@ export const createOrder = createAsyncThunk(
 );
 
 interface IOrderState {
-  order: IOrder | null;
+  order: IOrderResponse | null;
   error: SerializedError | null;
   loading: boolean;
 }
@@ -34,7 +34,7 @@ const orderSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       createOrder.fulfilled,
-      (state, { payload }: PayloadAction<IOrder>) => {
+      (state, { payload }: PayloadAction<IOrderResponse>) => {
         state.order = payload;
         state.loading = false;
       }

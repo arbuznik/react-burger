@@ -7,12 +7,6 @@
     column-gap: 60px;
 }
 
-.profileLink {
-    display: flex;
-    align-items: center;
-    height: 64px;
-}
-
 .form {
     display: flex;
     flex-direction: column;
@@ -24,16 +18,4 @@
     display: flex;
     gap: 10px;
     align-self: end;
-}
-
-.button {
-    background: #131316;
-    border: 0;
-    color: #8585AD;
-    cursor: pointer;
-    transition: color 0.3s ease-in;
-}
-
-.button:hover {
-    color: white;
 }
