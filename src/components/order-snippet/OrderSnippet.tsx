@@ -8,7 +8,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useAppSelector } from "../../hooks/hooks";
 import { getIngredients } from "../../services/slices/ingredients";
-import { calcPrice, getIngredientsURLs } from "../../utils/helpers";
+import { calcPrice, getIngredientsByIDs } from "../../utils/helpers";
 import IngredientThumbnail from "../ingredient-thumbnail/IngredientThumbnail";
 import { MAX_INGREDIENTS_FOR_DISPLAY } from "../../utils/constants";
 import { Link } from "react-router-dom";
@@ -21,10 +21,7 @@ interface IOrderSnippetProps {
 const OrderSnippet: FC<IOrderSnippetProps> = ({ showStatus, order }) => {
   const ingredients = useAppSelector(getIngredients);
   const price = calcPrice(ingredients, order.ingredients);
-  const ingredientsImagesURLs = getIngredientsURLs(
-    ingredients,
-    order.ingredients
-  );
+  const orderIngredients = getIngredientsByIDs(ingredients, order.ingredients);
 
   return (
     <Link to={`/profile/orders/${order._id}`} className={styles.container}>
@@ -44,15 +41,15 @@ const OrderSnippet: FC<IOrderSnippetProps> = ({ showStatus, order }) => {
       )}
       <div className={styles.orderDetails}>
         <div className={styles.ingredients}>
-          {ingredientsImagesURLs
+          {orderIngredients
             .slice(0, MAX_INGREDIENTS_FOR_DISPLAY)
-            .map((url, i, array) => (
+            .map((ingredient, i, array) => (
               <IngredientThumbnail
                 key={i}
-                url={url}
+                url={ingredient.image_mobile}
                 index={i}
                 last={i === array.length - 1}
-                count={ingredientsImagesURLs.length - array.length}
+                count={orderIngredients.length - array.length}
               />
             ))}
         </div>

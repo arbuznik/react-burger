@@ -60,6 +60,7 @@ class Api implements IApi {
     return fetch(this.endpoint + "orders", {
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + jsCookie.get("accessToken"),
       },
       method: "POST",
       body: JSON.stringify(ingredients),

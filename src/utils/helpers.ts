@@ -33,15 +33,15 @@ export function calcPrice(
   return price;
 }
 
-export function getIngredientsURLs(
+export function getIngredientsByIDs(
   ingredients: IIngredient[],
-  orderIngredients: string[]
-): string[] {
-  let result: string[] = [];
-  orderIngredients.forEach((ingredient) => {
-    const ingr = ingredients.find((i) => i._id === ingredient);
-    if (ingr) {
-      result.push(ingr.image_mobile);
+  IDs: string[]
+): IIngredient[] {
+  let result: IIngredient[] = [];
+  IDs.forEach((id) => {
+    const ingredient = ingredients.find((i) => i._id === id);
+    if (ingredient) {
+      result.push(ingredient);
     }
   });
 

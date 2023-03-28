@@ -20,6 +20,7 @@ import {
   fetchIngredients,
   getIngredients,
 } from "../../services/slices/ingredients";
+import OrderPage from "../../pages/order/OrderPage";
 
 export const App: FC = () => {
   const dispatch = useAppDispatch();
@@ -58,6 +59,10 @@ export const App: FC = () => {
           <Route
             path="/profile/orders"
             element={<ProtectedRoute element={<OrdersPage />} />}
+          />
+          <Route
+            path="/profile/orders/:id"
+            element={<ProtectedRoute element={<OrderPage />} />}
           />
           <Route
             path="/login"
