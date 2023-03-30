@@ -23,7 +23,12 @@ const OrdersPage: FC = () => {
       </div>
       <div className={styles.feed}>
         {orders.map((order) => (
-          <OrderSnippet key={order._id} order={order} showStatus />
+          <OrderSnippet
+            key={order._id}
+            urlPrefix={"/profile/orders"}
+            order={order}
+            showStatus
+          />
         ))}
       </div>
     </main>

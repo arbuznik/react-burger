@@ -14,7 +14,7 @@ import IngredientDetails from "../ingredient-details/IngredientDetails";
 import Modal from "../modal/Modal";
 import { resetActiveIngredient } from "../../services/slices/ingredient";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import Feed from "../../pages/feed/feed";
+import Feed from "../../pages/feed/Feed";
 import OrdersPage from "../../pages/orders/OrdersPage";
 import {
   fetchIngredients,
@@ -85,6 +85,10 @@ export const App: FC = () => {
             }
           />
           <Route path="/feed" element={<ProtectedRoute element={<Feed />} />} />
+          <Route
+            path="/feed/:id"
+            element={<ProtectedRoute element={<OrderPage />} />}
+          />
           <Route
             path="/ingredients/:id"
             element={<IngredientDetails outsideModal />}

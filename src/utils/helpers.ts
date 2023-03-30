@@ -26,24 +26,24 @@ export function calcPrice(
   ingredients: IIngredient[],
   orderIngredients: string[]
 ): number {
-  let price: number = 0;
-  orderIngredients.forEach((ingredient) => {
-    price += ingredients.find((i) => i._id === ingredient)?.price || 0;
-  });
-  return price;
+  return orderIngredients.reduce((sum: number, id: string) => {
+    const ingredient = ingredients.find((ingredient) => ingredient._id === id);
+    if (ingredient) {
+      return sum + ingredient.price;
+    }
+    return sum;
+  }, 0);
 }
 
 export function getIngredientsByIDs(
   ingredients: IIngredient[],
   IDs: string[]
 ): IIngredient[] {
-  let result: IIngredient[] = [];
-  IDs.forEach((id) => {
-    const ingredient = ingredients.find((i) => i._id === id);
+  return IDs.reduce((acc: IIngredient[], id: string) => {
+    const ingredient = ingredients.find((ingredient) => ingredient._id === id);
     if (ingredient) {
-      result.push(ingredient);
+      return [...acc, ingredient];
     }
-  });
-
-  return result;
+    return acc;
+  }, []);
 }
