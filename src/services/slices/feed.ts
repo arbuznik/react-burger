@@ -1,27 +1,19 @@
-import {
-  createAsyncThunk,
-  createSlice,
-  PayloadAction,
-  SerializedError,
-} from "@reduxjs/toolkit";
-import { IFeedResponse, IOrder } from "../../types/types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IFeedSuccessResponse, IOrder } from "../../types/types";
 import { RootState } from "../store";
-import { mockOrdersData } from "../../utils/constants";
 
-export const fetchOrders = createAsyncThunk("feed/getOrders", async () => {
-  return mockOrdersData;
-});
-
-interface IFeedState {
+export interface IFeedState {
   orders: IOrder[];
+  activeOrder: IOrder | null | undefined;
   total: number | null;
   totalToday: number | null;
-  error: SerializedError | null;
+  error: string | null;
   loading: boolean;
 }
 
 const initialState: IFeedState = {
   orders: [],
+  activeOrder: null,
   total: null,
   totalToday: null,
   error: null,
@@ -31,31 +23,36 @@ const initialState: IFeedState = {
 const feedSlice = createSlice({
   name: "feed",
   initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(
-      fetchOrders.fulfilled,
-      (state, { payload }: PayloadAction<IFeedResponse>) => {
-        state.orders = payload.orders;
-        state.total = payload.total;
-        state.totalToday = payload.totalToday;
-        state.loading = false;
-      }
-    );
-    builder.addCase(fetchOrders.rejected, (state, { error }) => {
-      state.orders = initialState.orders;
-      state.error = error;
-      state.loading = false;
-    });
-    builder.addCase(fetchOrders.pending, (state) => {
+  reducers: {
+    addFeedOrders: (
+      state,
+      { payload }: PayloadAction<IFeedSuccessResponse>
+    ) => {
+      state.orders = payload.orders;
+      state.totalToday = payload.totalToday;
+      state.total = payload.total;
       state.error = initialState.error;
-      state.loading = true;
-    });
+    },
+    setFeedActiveOrder: (state, { payload }: PayloadAction<string>) => {
+      state.activeOrder = state.orders.find((order) => order._id === payload);
+    },
+    setFeedError: (state, { payload }: PayloadAction<string>) => {
+      state.error = payload;
+    },
   },
 });
 
 export default feedSlice.reducer;
 
+export const { addFeedOrders, setFeedActiveOrder, setFeedError } =
+  feedSlice.actions;
+
 export const getOrders = (state: RootState) => state.feed.orders;
 export const getTotalOrders = (state: RootState) => state.feed.total;
 export const getTotalTodayOrders = (state: RootState) => state.feed.totalToday;
+export const getActiveOrder = (state: RootState) => state.feed.activeOrder;
+export const getDoneOrders = (state: RootState) =>
+  state.feed.orders.filter((order) => order.status === "done");
+export const getPendingOrders = (state: RootState) =>
+  state.feed.orders.filter((order) => order.status === "pending");
+export const getFeedError = (state: RootState) => state.feed.error;

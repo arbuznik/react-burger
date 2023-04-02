@@ -1,10 +1,4 @@
-import { ICategoriesNames, IIngredient } from "../types/types";
-
-export const categoriesNames: ICategoriesNames = {
-  bun: "Булки",
-  sauce: "Соусы",
-  main: "Начинки",
-};
+import { IIngredient } from "../types/types";
 
 export function getActiveCategories(ingredients: IIngredient[]): string[] {
   const categoriesWithProducts = new Set<string>();

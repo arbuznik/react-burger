@@ -1,17 +1,26 @@
-import React, { FC, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { fetchOrders, getOrders } from "../../services/slices/feed";
+import React, { FC } from "react";
+import { useAppSelector } from "../../hooks/hooks";
 import OrderSnippet from "../../components/order-snippet/OrderSnippet";
 import styles from "./OrdersPage.module.css";
 import ProfileMenu from "../../components/profile-menu/ProfileMenu";
+import {
+  getUserFeedError,
+  getUserOrders,
+} from "../../services/slices/user-feed";
 
 const OrdersPage: FC = () => {
-  const dispatch = useAppDispatch();
-  const orders = useAppSelector(getOrders);
+  const orders = useAppSelector(getUserOrders);
+  const error = useAppSelector(getUserFeedError);
 
-  useEffect(() => {
-    dispatch(fetchOrders());
-  }, [dispatch]);
+  if (error) {
+    return (
+      <main className={styles.main}>
+        <p className="text text_type_main-default text_color_error">
+          Ошибка загрузки заказов
+        </p>
+      </main>
+    );
+  }
 
   return (
     <main className={styles.main}>
@@ -22,14 +31,15 @@ const OrdersPage: FC = () => {
         </p>
       </div>
       <div className={styles.feed}>
-        {orders.map((order) => (
-          <OrderSnippet
-            key={order._id}
-            urlPrefix={"/profile/orders"}
-            order={order}
-            showStatus
-          />
-        ))}
+        {orders.length > 0 &&
+          orders.map((order) => (
+            <OrderSnippet
+              key={order._id}
+              urlPrefix={"/profile/orders"}
+              order={order}
+              showStatus
+            />
+          ))}
       </div>
     </main>
   );

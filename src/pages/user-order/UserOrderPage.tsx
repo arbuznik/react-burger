@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import styles from "./OrderPage.module.css";
+import styles from "./UserOrderPage.module.css";
 import clsx from "clsx";
 import {
   CurrencyIcon,
@@ -9,31 +9,31 @@ import {
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { getIngredients } from "../../services/slices/ingredients";
 import { calcPrice, getIngredientsByIDs } from "../../utils/helpers";
-import {
-  getActiveOrder,
-  getOrders,
-  setFeedActiveOrder,
-} from "../../services/slices/feed";
 import { orderStatuses } from "../../utils/constants";
 import Loader from "../../components/loader/Loader";
+import {
+  getUserActiveOrder,
+  getUserOrders,
+  setUserFeedActiveOrder,
+} from "../../services/slices/user-feed";
 
-interface IOrderPageProps {
+interface IUserOrderPageProps {
   outsideModal?: boolean;
 }
 
-const OrderPage: FC<IOrderPageProps> = ({ outsideModal }) => {
+const UserOrderPage: FC<IUserOrderPageProps> = ({ outsideModal }) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const allIngredients = useAppSelector(getIngredients);
-  const orders = useAppSelector(getOrders);
-  const order = useAppSelector(getActiveOrder);
+  const orders = useAppSelector(getUserOrders);
+  const order = useAppSelector(getUserActiveOrder);
   const orderIngredientsCount: {
     [k: string]: number;
   } = {};
 
   useEffect(() => {
-    if (id && orders.length) {
-      dispatch(setFeedActiveOrder(id));
+    if (id && orders.length > 0) {
+      dispatch(setUserFeedActiveOrder(id));
     }
   }, [id, dispatch, orders]);
 
@@ -124,4 +124,4 @@ const OrderPage: FC<IOrderPageProps> = ({ outsideModal }) => {
   );
 };
 
-export default OrderPage;
+export default UserOrderPage;

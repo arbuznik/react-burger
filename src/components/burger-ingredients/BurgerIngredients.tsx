@@ -3,13 +3,13 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./BurgerIngredients.module.css";
 import {
   getActiveCategories,
-  categoriesNames,
   getIngredientsByCategory,
 } from "../../utils/helpers";
 import BurgerIngredient from "../burger-ingredient/BurgerIngredient";
 import { getIngredients } from "../../services/slices/ingredients";
 import { Link, useLocation } from "react-router-dom";
 import { useAppSelector } from "../../hooks/hooks";
+import { categoriesNames } from "../../utils/constants";
 
 const BurgerIngredients: FC = () => {
   const location = useLocation();

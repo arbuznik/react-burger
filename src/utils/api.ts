@@ -57,14 +57,14 @@ class Api implements IApi {
   }
 
   createOrder(ingredients: ICreateOrderPayload): Promise<IOrderResponse> {
-    return fetch(this.endpoint + "orders", {
+    return this.fetchWithRefresh(this.endpoint + "orders", {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + jsCookie.get("accessToken"),
       },
       method: "POST",
       body: JSON.stringify(ingredients),
-    }).then((res) => this.handleApiResponse(res));
+    });
   }
 
   resetPassword(email: string): Promise<IUserAuthStatusResponse> {

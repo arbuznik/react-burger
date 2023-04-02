@@ -7,7 +7,11 @@ import {
 import styles from "./BurgerConstructor.module.css";
 import Modal from "../modal/Modal";
 import OrderDetails from "../order-details/OrderDetails";
-import { createOrder, getOrder } from "../../services/slices/order";
+import {
+  createOrder,
+  getOrder,
+  getOrderIsLoading,
+} from "../../services/slices/order";
 import {
   addIngredient,
   getConstructorBun,
@@ -27,6 +31,7 @@ import { IIngredient } from "../../types/types";
 const BurgerConstructor: FC = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(getCurrentUser);
+  const isOrderLoading = useAppSelector(getOrderIsLoading);
   const navigate = useNavigate();
   const starterBun = useAppSelector(getStarterBun);
   const bun = useAppSelector(getConstructorBun);
@@ -125,14 +130,15 @@ const BurgerConstructor: FC = () => {
             type="primary"
             size="medium"
             onClick={handleClick}
+            disabled={isOrderLoading}
           >
             Оформить заказ
           </Button>
         </div>
       </section>
-      {isModalVisible && order?.order?.number && (
+      {isModalVisible && (
         <Modal onClose={handleClose}>
-          <OrderDetails orderId={order.order.number} />
+          <OrderDetails orderId={order?.order?.number} />
         </Modal>
       )}
     </>

@@ -21,14 +21,24 @@ import {
   getIngredients,
 } from "../../services/slices/ingredients";
 import OrderPage from "../../pages/order/OrderPage";
+import { WS_CONNECTION_START } from "../../services/middlewares/types";
+import { getActiveOrder } from "../../services/slices/feed";
+import UserOrderPage from "../../pages/user-order/UserOrderPage";
+import { getUserActiveOrder } from "../../services/slices/user-feed";
 
 export const App: FC = () => {
   const dispatch = useAppDispatch();
+  const order = useAppSelector(getActiveOrder);
+  const userOrder = useAppSelector(getUserActiveOrder);
   const user = useAppSelector(getCurrentUser);
   const ingredients = useAppSelector(getIngredients);
   const navigate = useNavigate();
   const location = useLocation();
   const state = location.state;
+
+  useEffect(() => {
+    dispatch({ type: WS_CONNECTION_START });
+  }, [dispatch]);
 
   useEffect(() => {
     if (!user) {
@@ -62,7 +72,9 @@ export const App: FC = () => {
           />
           <Route
             path="/profile/orders/:id"
-            element={<ProtectedRoute element={<OrderPage />} />}
+            element={
+              <ProtectedRoute element={<UserOrderPage outsideModal />} />
+            }
           />
           <Route
             path="/login"
@@ -84,11 +96,8 @@ export const App: FC = () => {
               <ProtectedRoute onlyUnAuth element={<ResetPasswordPage />} />
             }
           />
-          <Route path="/feed" element={<ProtectedRoute element={<Feed />} />} />
-          <Route
-            path="/feed/:id"
-            element={<ProtectedRoute element={<OrderPage />} />}
-          />
+          <Route path="/feed" element={<Feed />} />
+          <Route path="/feed/:id" element={<OrderPage outsideModal />} />
           <Route
             path="/ingredients/:id"
             element={<IngredientDetails outsideModal />}
@@ -105,6 +114,26 @@ export const App: FC = () => {
               <Modal onClose={handleClose} title="Детали ингредиента">
                 <IngredientDetails />
               </Modal>
+            }
+          />
+          <Route
+            path="/feed/:id"
+            element={
+              <Modal onClose={handleClose} title={order?.number}>
+                <OrderPage />
+              </Modal>
+            }
+          />
+          <Route
+            path="/profile/orders/:id"
+            element={
+              <ProtectedRoute
+                element={
+                  <Modal onClose={handleClose} title={userOrder?.number}>
+                    <UserOrderPage />
+                  </Modal>
+                }
+              />
             }
           />
         </Routes>

@@ -10,8 +10,11 @@ import { useAppSelector } from "../../hooks/hooks";
 import { getIngredients } from "../../services/slices/ingredients";
 import { calcPrice, getIngredientsByIDs } from "../../utils/helpers";
 import IngredientThumbnail from "../ingredient-thumbnail/IngredientThumbnail";
-import { MAX_INGREDIENTS_FOR_DISPLAY } from "../../utils/constants";
-import { Link } from "react-router-dom";
+import {
+  MAX_INGREDIENTS_FOR_DISPLAY,
+  orderStatuses,
+} from "../../utils/constants";
+import { Link, useLocation } from "react-router-dom";
 
 interface IOrderSnippetProps {
   urlPrefix: string;
@@ -24,12 +27,17 @@ const OrderSnippet: FC<IOrderSnippetProps> = ({
   showStatus,
   order,
 }) => {
+  const location = useLocation();
   const ingredients = useAppSelector(getIngredients);
   const price = calcPrice(ingredients, order.ingredients);
   const orderIngredients = getIngredientsByIDs(ingredients, order.ingredients);
 
   return (
-    <Link to={`${urlPrefix}/${order._id}`} className={styles.container}>
+    <Link
+      to={`${urlPrefix}/${order._id}`}
+      state={{ backgroundLocation: location }}
+      className={styles.container}
+    >
       <div className={styles.orderCredentials}>
         <span className="text_type_digits-default">#{order.number}</span>
         <span className="text_type_main-default text_color_inactive">
@@ -40,8 +48,12 @@ const OrderSnippet: FC<IOrderSnippetProps> = ({
         {order.name}
       </h4>
       {showStatus && (
-        <p className={clsx(styles.status, "text_type_main-default")}>
-          {order.status}
+        <p
+          className={clsx(styles.status, "text_type_main-default", {
+            text_color_success: order.status === "done",
+          })}
+        >
+          {orderStatuses[order.status]}
         </p>
       )}
       <div className={styles.orderDetails}>

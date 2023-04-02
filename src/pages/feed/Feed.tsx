@@ -1,24 +1,34 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import {
-  fetchOrders,
+  getDoneOrders,
+  getFeedError,
   getOrders,
+  getPendingOrders,
   getTotalOrders,
   getTotalTodayOrders,
 } from "../../services/slices/feed";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppSelector } from "../../hooks/hooks";
 import styles from "./Feed.module.css";
 import OrderSnippet from "../../components/order-snippet/OrderSnippet";
 import clsx from "clsx";
+import { MAX_ORDER_NUMBERS } from "../../utils/constants";
 
 const Feed: FC = () => {
-  const dispatch = useAppDispatch();
   const orders = useAppSelector(getOrders);
+  const doneOrders = useAppSelector(getDoneOrders).slice(0, MAX_ORDER_NUMBERS);
+  const pendingOrders = useAppSelector(getPendingOrders).slice(
+    0,
+    MAX_ORDER_NUMBERS
+  );
   const totalOrders = useAppSelector(getTotalOrders);
   const totalTodayOrders = useAppSelector(getTotalTodayOrders);
+  const error = useAppSelector(getFeedError);
 
-  useEffect(() => {
-    dispatch(fetchOrders());
-  }, [dispatch]);
+  if (error) {
+    return (
+      <p className="text text_type_main-default text_color_error">{error}</p>
+    );
+  }
 
   return (
     <main className={styles.main}>
@@ -36,26 +46,27 @@ const Feed: FC = () => {
             <h4 className={clsx(styles.statusName, "text_type_main-medium")}>
               Готовы:
             </h4>
-            <span className="text_type_digits-default text_color_success">
-              034533
-            </span>
-            <span className="text_type_digits-default text_color_success">
-              034533
-            </span>
-            <span className="text_type_digits-default text_color_success">
-              034533
-            </span>
-            <span className="text_type_digits-default text_color_success">
-              034533
-            </span>
+            <ul className={styles.numbers}>
+              {doneOrders.map((order) => (
+                <li key={order._id}>
+                  <span className="text_type_digits-default text_color_success">
+                    {order.number}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
           <div className={styles.status}>
             <h4 className={clsx(styles.statusName, "text_type_main-medium")}>
               В работе:
             </h4>
-            <span className="text_type_digits-default">034533</span>
-            <span className="text_type_digits-default">034533</span>
-            <span className="text_type_digits-default">034533</span>
+            <ul className={styles.numbers}>
+              {pendingOrders.map((order) => (
+                <span key={order._id} className="text_type_digits-default">
+                  {order.number}
+                </span>
+              ))}
+            </ul>
           </div>
         </div>
         <div className={styles.infoSection}>

@@ -54,3 +54,4 @@ const orderSlice = createSlice({
 export default orderSlice.reducer;
 
 export const getOrder = (state: RootState) => state.order.order;
+export const getOrderIsLoading = (state: RootState) => state.order.loading;
