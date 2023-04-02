@@ -1,6 +1,5 @@
 import { Middleware } from "redux";
 import { RootState } from "../store";
-import { WS_CONNECTION_START } from "./types";
 import { IWSActions } from "../../types/types";
 
 export const websocketMiddleware = (
@@ -14,7 +13,7 @@ export const websocketMiddleware = (
     const { dispatch } = store;
     const { type } = action;
 
-    if (type === WS_CONNECTION_START) {
+    if (type === actions.open().type) {
       const endpoint = url + (token ? `?token=${token}` : "");
       socket = new WebSocket(endpoint);
     }
@@ -42,6 +41,10 @@ export const websocketMiddleware = (
       socket.onclose = () => {
         console.log("socket closed");
       };
+
+      if (type === actions.close().type) {
+        socket.close(1000);
+      }
     }
     next(action);
   };

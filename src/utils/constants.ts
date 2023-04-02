@@ -1,7 +1,14 @@
 import { ICategoriesNames, IOrderStatuses, IWSActions } from "../types/types";
-import { addFeedOrders, setFeedError } from "../services/slices/feed";
+import {
+  addFeedOrders,
+  closeSocket,
+  openSocket,
+  setFeedError,
+} from "../services/slices/feed";
 import {
   addUserFeedOrders,
+  closeUserSocket,
+  openUserSocket,
   setUserFeedError,
 } from "../services/slices/user-feed";
 
@@ -29,9 +36,13 @@ export const orderStatuses: IOrderStatuses = {
 export const feedActions: IWSActions = {
   onMessage: addFeedOrders,
   onError: setFeedError,
+  open: openSocket,
+  close: closeSocket,
 };
 
 export const userFeedActions: IWSActions = {
   onMessage: addUserFeedOrders,
   onError: setUserFeedError,
+  open: openUserSocket,
+  close: closeUserSocket,
 };

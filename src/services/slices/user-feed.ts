@@ -31,13 +31,20 @@ const userFeedSlice = createSlice({
     setUserFeedError: (state, { payload }: PayloadAction<string>) => {
       state.error = payload;
     },
+    openUserSocket: () => {},
+    closeUserSocket: () => {},
   },
 });
 
 export default userFeedSlice.reducer;
 
-export const { addUserFeedOrders, setUserFeedActiveOrder, setUserFeedError } =
-  userFeedSlice.actions;
+export const {
+  addUserFeedOrders,
+  setUserFeedActiveOrder,
+  setUserFeedError,
+  openUserSocket,
+  closeUserSocket,
+} = userFeedSlice.actions;
 
 export const getUserOrders = (state: RootState) => state.userFeed.orders;
 export const getUserActiveOrder = (state: RootState) =>

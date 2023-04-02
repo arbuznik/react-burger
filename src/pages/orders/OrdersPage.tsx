@@ -1,16 +1,27 @@
-import React, { FC } from "react";
-import { useAppSelector } from "../../hooks/hooks";
+import React, { FC, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import OrderSnippet from "../../components/order-snippet/OrderSnippet";
 import styles from "./OrdersPage.module.css";
 import ProfileMenu from "../../components/profile-menu/ProfileMenu";
 import {
+  closeUserSocket,
   getUserFeedError,
   getUserOrders,
+  openUserSocket,
 } from "../../services/slices/user-feed";
 
 const OrdersPage: FC = () => {
+  const dispatch = useAppDispatch();
   const orders = useAppSelector(getUserOrders);
   const error = useAppSelector(getUserFeedError);
+
+  useEffect(() => {
+    dispatch(openUserSocket());
+
+    return () => {
+      dispatch(closeUserSocket());
+    };
+  }, [dispatch]);
 
   if (error) {
     return (

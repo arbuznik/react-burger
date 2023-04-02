@@ -39,13 +39,20 @@ const feedSlice = createSlice({
     setFeedError: (state, { payload }: PayloadAction<string>) => {
       state.error = payload;
     },
+    openSocket: () => {},
+    closeSocket: () => {},
   },
 });
 
 export default feedSlice.reducer;
 
-export const { addFeedOrders, setFeedActiveOrder, setFeedError } =
-  feedSlice.actions;
+export const {
+  addFeedOrders,
+  setFeedActiveOrder,
+  setFeedError,
+  openSocket,
+  closeSocket,
+} = feedSlice.actions;
 
 export const getOrders = (state: RootState) => state.feed.orders;
 export const getTotalOrders = (state: RootState) => state.feed.total;

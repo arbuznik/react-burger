@@ -21,7 +21,6 @@ import {
   getIngredients,
 } from "../../services/slices/ingredients";
 import OrderPage from "../../pages/order/OrderPage";
-import { WS_CONNECTION_START } from "../../services/middlewares/types";
 import { getActiveOrder } from "../../services/slices/feed";
 import UserOrderPage from "../../pages/user-order/UserOrderPage";
 import { getUserActiveOrder } from "../../services/slices/user-feed";
@@ -35,10 +34,6 @@ export const App: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const state = location.state;
-
-  useEffect(() => {
-    dispatch({ type: WS_CONNECTION_START });
-  }, [dispatch]);
 
   useEffect(() => {
     if (!user) {

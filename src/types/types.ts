@@ -124,4 +124,6 @@ export interface IFeedSuccessResponse {
 export interface IWSActions {
   onMessage: Function;
   onError: Function;
+  open: Function;
+  close: Function;
 }

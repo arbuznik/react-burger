@@ -1,19 +1,22 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import {
+  closeSocket,
   getDoneOrders,
   getFeedError,
   getOrders,
   getPendingOrders,
   getTotalOrders,
   getTotalTodayOrders,
+  openSocket,
 } from "../../services/slices/feed";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import styles from "./Feed.module.css";
 import OrderSnippet from "../../components/order-snippet/OrderSnippet";
 import clsx from "clsx";
 import { MAX_ORDER_NUMBERS } from "../../utils/constants";
 
 const Feed: FC = () => {
+  const dispatch = useAppDispatch();
   const orders = useAppSelector(getOrders);
   const doneOrders = useAppSelector(getDoneOrders).slice(0, MAX_ORDER_NUMBERS);
   const pendingOrders = useAppSelector(getPendingOrders).slice(
@@ -23,6 +26,14 @@ const Feed: FC = () => {
   const totalOrders = useAppSelector(getTotalOrders);
   const totalTodayOrders = useAppSelector(getTotalTodayOrders);
   const error = useAppSelector(getFeedError);
+
+  useEffect(() => {
+    dispatch(openSocket());
+
+    return () => {
+      dispatch(closeSocket());
+    };
+  }, [dispatch]);
 
   if (error) {
     return (
