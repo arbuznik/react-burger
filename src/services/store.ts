@@ -7,13 +7,7 @@ import userReducer from "./slices/user";
 import feedReducer from "./slices/feed";
 import userFeedReducer from "./slices/user-feed";
 import { websocketMiddleware } from "./middlewares/websocketMiddleware";
-import {
-  ALL_ORDERS_API_ENDPOINT,
-  USER_ORDERS_API_ENDPOINT,
-  feedActions,
-  userFeedActions,
-} from "../utils/constants";
-import jsCookie from "js-cookie";
+import { feedActions, userFeedActions } from "../utils/constants";
 
 const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
@@ -29,14 +23,8 @@ export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
-      .concat(websocketMiddleware(ALL_ORDERS_API_ENDPOINT, feedActions))
-      .concat(
-        websocketMiddleware(
-          USER_ORDERS_API_ENDPOINT,
-          userFeedActions,
-          jsCookie.get("accessToken")
-        )
-      ),
+      .concat(websocketMiddleware(feedActions))
+      .concat(websocketMiddleware(userFeedActions)),
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -33,6 +33,7 @@ const userFeedSlice = createSlice({
     },
     openUserSocket: () => {},
     closeUserSocket: () => {},
+    initUserSocket: (_, __: PayloadAction<string>) => {},
   },
 });
 
@@ -44,6 +45,7 @@ export const {
   setUserFeedError,
   openUserSocket,
   closeUserSocket,
+  initUserSocket,
 } = userFeedSlice.actions;
 
 export const getUserOrders = (state: RootState) => state.userFeed.orders;

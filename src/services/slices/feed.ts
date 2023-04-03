@@ -41,6 +41,7 @@ const feedSlice = createSlice({
     },
     openSocket: () => {},
     closeSocket: () => {},
+    initSocket: (_, __: PayloadAction<string>) => {},
   },
 });
 
@@ -52,6 +53,7 @@ export const {
   setFeedError,
   openSocket,
   closeSocket,
+  initSocket,
 } = feedSlice.actions;
 
 export const getOrders = (state: RootState) => state.feed.orders;

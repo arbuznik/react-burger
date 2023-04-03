@@ -43,3 +43,28 @@
     margin: 30px 0 50px;
     align-items: center;
 }
+
+.fillingPlaceholder {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    background-color: #2f2f37;
+}
+
+.fillingPlaceholderTop {
+    composes: fillingPlaceholder;
+    border-radius: 88px 88px 40px 40px;
+}
+
+.fillingPlaceholderBottom {
+    composes: fillingPlaceholder;
+    border-radius: 40px 40px 88px 88px;
+}
+
+.fillingPlaceholderMiddle {
+    composes: fillingPlaceholder;
+    width: 95%;
+    border-radius: 40px;
+}

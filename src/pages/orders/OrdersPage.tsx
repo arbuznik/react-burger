@@ -7,8 +7,10 @@ import {
   closeUserSocket,
   getUserFeedError,
   getUserOrders,
-  openUserSocket,
+  initUserSocket,
 } from "../../services/slices/user-feed";
+import { USER_ORDERS_API_ENDPOINT } from "../../utils/constants";
+import jsCookie from "js-cookie";
 
 const OrdersPage: FC = () => {
   const dispatch = useAppDispatch();
@@ -16,7 +18,11 @@ const OrdersPage: FC = () => {
   const error = useAppSelector(getUserFeedError);
 
   useEffect(() => {
-    dispatch(openUserSocket());
+    dispatch(
+      initUserSocket(
+        USER_ORDERS_API_ENDPOINT + `?token=${jsCookie.get("accessToken")}`
+      )
+    );
 
     return () => {
       dispatch(closeUserSocket());

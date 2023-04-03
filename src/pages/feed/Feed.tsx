@@ -7,13 +7,16 @@ import {
   getPendingOrders,
   getTotalOrders,
   getTotalTodayOrders,
-  openSocket,
+  initSocket,
 } from "../../services/slices/feed";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import styles from "./Feed.module.css";
 import OrderSnippet from "../../components/order-snippet/OrderSnippet";
 import clsx from "clsx";
-import { MAX_ORDER_NUMBERS } from "../../utils/constants";
+import {
+  ALL_ORDERS_API_ENDPOINT,
+  MAX_ORDER_NUMBERS,
+} from "../../utils/constants";
 
 const Feed: FC = () => {
   const dispatch = useAppDispatch();
@@ -28,7 +31,7 @@ const Feed: FC = () => {
   const error = useAppSelector(getFeedError);
 
   useEffect(() => {
-    dispatch(openSocket());
+    dispatch(initSocket(ALL_ORDERS_API_ENDPOINT));
 
     return () => {
       dispatch(closeSocket());

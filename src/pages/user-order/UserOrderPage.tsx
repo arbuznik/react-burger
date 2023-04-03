@@ -9,13 +9,16 @@ import {
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { getIngredients } from "../../services/slices/ingredients";
 import { calcPrice, getIngredientsByIDs } from "../../utils/helpers";
-import { orderStatuses } from "../../utils/constants";
+import { orderStatuses, USER_ORDERS_API_ENDPOINT } from "../../utils/constants";
 import Loader from "../../components/loader/Loader";
 import {
+  closeUserSocket,
   getUserActiveOrder,
   getUserOrders,
+  initUserSocket,
   setUserFeedActiveOrder,
 } from "../../services/slices/user-feed";
+import jsCookie from "js-cookie";
 
 interface IUserOrderPageProps {
   outsideModal?: boolean;
@@ -30,6 +33,20 @@ const UserOrderPage: FC<IUserOrderPageProps> = ({ outsideModal }) => {
   const orderIngredientsCount: {
     [k: string]: number;
   } = {};
+
+  useEffect(() => {
+    if (!orders.length) {
+      dispatch(
+        initUserSocket(
+          USER_ORDERS_API_ENDPOINT + `?token=${jsCookie.get("accessToken")}`
+        )
+      );
+
+      return () => {
+        dispatch(closeUserSocket());
+      };
+    }
+  }, [dispatch, orders.length]);
 
   useEffect(() => {
     if (id && orders.length > 0) {

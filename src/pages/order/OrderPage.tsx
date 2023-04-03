@@ -10,11 +10,13 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { getIngredients } from "../../services/slices/ingredients";
 import { calcPrice, getIngredientsByIDs } from "../../utils/helpers";
 import {
+  closeSocket,
   getActiveOrder,
   getOrders,
+  initSocket,
   setFeedActiveOrder,
 } from "../../services/slices/feed";
-import { orderStatuses } from "../../utils/constants";
+import { ALL_ORDERS_API_ENDPOINT, orderStatuses } from "../../utils/constants";
 import Loader from "../../components/loader/Loader";
 
 interface IOrderPageProps {
@@ -30,6 +32,16 @@ const OrderPage: FC<IOrderPageProps> = ({ outsideModal }) => {
   const orderIngredientsCount: {
     [k: string]: number;
   } = {};
+
+  useEffect(() => {
+    if (!orders.length) {
+      dispatch(initSocket(ALL_ORDERS_API_ENDPOINT));
+
+      return () => {
+        dispatch(closeSocket());
+      };
+    }
+  }, [dispatch, orders.length]);
 
   useEffect(() => {
     if (id && orders.length) {

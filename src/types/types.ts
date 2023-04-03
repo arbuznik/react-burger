@@ -126,4 +126,5 @@ export interface IWSActions {
   onError: Function;
   open: Function;
   close: Function;
+  initSocket: Function;
 }

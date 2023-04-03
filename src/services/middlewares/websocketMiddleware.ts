@@ -1,21 +1,18 @@
 import { Middleware } from "redux";
-import { RootState } from "../store";
 import { IWSActions } from "../../types/types";
+import { RootState } from "../store";
 
 export const websocketMiddleware = (
-  url: string,
-  actions: IWSActions,
-  token?: string
+  actions: IWSActions
 ): Middleware<{}, RootState> => {
   return (store) => (next) => (action) => {
     let socket: WebSocket | null = null;
 
     const { dispatch } = store;
-    const { type } = action;
+    const { type, payload } = action;
 
-    if (type === actions.open().type) {
-      const endpoint = url + (token ? `?token=${token}` : "");
-      socket = new WebSocket(endpoint);
+    if (type === actions.initSocket().type) {
+      socket = new WebSocket(payload);
     }
 
     if (socket) {
@@ -33,7 +30,9 @@ export const websocketMiddleware = (
 
         if (parsedData.success) {
           dispatch(actions.onMessage(parsedData));
-        } else {
+        }
+
+        if (!parsedData.success) {
           dispatch(actions.onError(parsedData.message));
         }
       };
