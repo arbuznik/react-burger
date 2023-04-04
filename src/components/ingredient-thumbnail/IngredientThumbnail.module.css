@@ -1,0 +1,32 @@
+.container {
+    width: 64px;
+    height: 64px;
+    box-sizing: border-box;
+    padding: 4px;
+    background: #131316;
+    border-radius: 100px;
+    border: 2px solid #801AB2;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.img {
+    position: absolute;
+    object-fit: cover;
+    max-height: 90%;
+}
+
+.overlay {
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    z-index: 50;
+    position: absolute;
+}

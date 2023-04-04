@@ -4,7 +4,7 @@ import {
   getCurrentUser,
   isUserLoading,
 } from "../../services/slices/user";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import styles from "./ProtectedRoute.module.css";
 import Loader from "../loader/Loader";
 import { useAppSelector } from "../../hooks/hooks";
@@ -19,6 +19,9 @@ const ProtectedRoute: FC<IProtectedRouteProps> = ({ onlyUnAuth, element }) => {
   const isLoading = useAppSelector(isUserLoading);
   const authChecked = useAppSelector(getAuthChecked);
 
+  const location = useLocation();
+  const from = location.state?.from || "/";
+  console.log(location);
   if (!authChecked || isLoading) {
     return (
       <main className={styles.main}>
@@ -28,11 +31,11 @@ const ProtectedRoute: FC<IProtectedRouteProps> = ({ onlyUnAuth, element }) => {
   }
 
   if (user && onlyUnAuth) {
-    return <Navigate to="/" />;
+    return <Navigate to={from} />;
   }
 
   if (!user && !onlyUnAuth) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" state={{ from: location }} />;
   }
 
   return element;

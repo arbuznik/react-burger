@@ -35,7 +35,7 @@ export interface IUserLoginCredentials {
   password: string;
 }
 
-export interface IOrder {
+export interface IOrderResponse {
   success: boolean;
   name: string;
   order: {
@@ -79,6 +79,11 @@ export interface IFetchWithRefreshOptions {
 export interface ICategoriesNames {
   [name: string]: string;
 }
+export interface IOrderStatuses {
+  done: "Выполнен";
+  pending: "Готовится";
+  created: "Создан";
+}
 
 export interface IFillingDragIndexes {
   dragIndex: number;
@@ -92,4 +97,34 @@ export interface IPasswordResetPayload {
 
 export interface ICreateOrderPayload {
   ingredients: string[];
+}
+
+export interface IOrder {
+  _id: string;
+  ingredients: string[];
+  status: "done" | "pending" | "created";
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
+}
+
+export interface IFeedErrorResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface IFeedSuccessResponse {
+  success: boolean;
+  orders: IOrder[];
+  total: number;
+  totalToday: number;
+}
+
+export interface IWSActions {
+  onMessage: Function;
+  onError: Function;
+  open: Function;
+  close: Function;
+  initSocket: Function;
 }

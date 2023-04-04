@@ -5,10 +5,7 @@ import {
   setActiveIngredient,
 } from "../../services/slices/ingredient";
 import { useParams } from "react-router-dom";
-import {
-  fetchIngredients,
-  getIngredients,
-} from "../../services/slices/ingredients";
+import { getIngredients } from "../../services/slices/ingredients";
 import clsx from "clsx";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
@@ -23,10 +20,6 @@ const IngredientDetails: FC<IIngredientDetailsProps> = ({ outsideModal }) => {
   const { id } = useParams();
 
   useEffect(() => {
-    if (!ingredients.length) {
-      dispatch(fetchIngredients());
-    }
-
     if (ingredients.length && !ingredient) {
       dispatch(
         setActiveIngredient(

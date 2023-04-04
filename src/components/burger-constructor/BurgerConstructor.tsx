@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import {
   Button,
   ConstructorElement,
@@ -7,7 +7,11 @@ import {
 import styles from "./BurgerConstructor.module.css";
 import Modal from "../modal/Modal";
 import OrderDetails from "../order-details/OrderDetails";
-import { createOrder, getOrder } from "../../services/slices/order";
+import {
+  createOrder,
+  getOrder,
+  getOrderIsLoading,
+} from "../../services/slices/order";
 import {
   addIngredient,
   getConstructorBun,
@@ -16,7 +20,6 @@ import {
   resetConstructor,
 } from "../../services/slices/ingredients-constructor";
 import { useDrop } from "react-dnd";
-import { getStarterBun } from "../../services/slices/ingredients";
 import BurgerConstructorFilling from "../burger-constructor-filling/BurgerConstructorFilling";
 import { nanoid } from "@reduxjs/toolkit";
 import { getCurrentUser } from "../../services/slices/user";
@@ -27,8 +30,8 @@ import { IIngredient } from "../../types/types";
 const BurgerConstructor: FC = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(getCurrentUser);
+  const isOrderLoading = useAppSelector(getOrderIsLoading);
   const navigate = useNavigate();
-  const starterBun = useAppSelector(getStarterBun);
   const bun = useAppSelector(getConstructorBun);
   const fillings = useAppSelector(getConstructorFillings);
   const order = useAppSelector(getOrder);
@@ -50,12 +53,6 @@ const BurgerConstructor: FC = () => {
       })
     );
   };
-
-  useEffect(() => {
-    if (starterBun && !bun) {
-      dispatch(addIngredient(starterBun));
-    }
-  }, [starterBun, dispatch, bun]);
 
   const handleClick = () => {
     if (!user) {
@@ -83,35 +80,57 @@ const BurgerConstructor: FC = () => {
     <>
       <section className={styles.constructorContainer}>
         <div ref={dropTargetRef} className={styles.ingredientsContainer}>
-          {bun && (
+          {bun ? (
             <div className={styles.bunContainer}>
               <ConstructorElement
-                text={bun.name}
+                text={bun.name + " (верх)"}
                 thumbnail={bun.image}
                 price={bun.price}
                 type={"top"}
                 isLocked
               />
             </div>
+          ) : (
+            <div className={styles.bunContainer}>
+              <div className={styles.fillingPlaceholderTop}>
+                <p className="text_type_main-default">Перетащите сюда булку</p>
+              </div>
+            </div>
           )}
 
           <div className={styles.fillingsContainer}>
-            {fillings.map((filling, index) => (
-              <div key={filling.uuid} className={styles.ingredientContainer}>
-                <BurgerConstructorFilling filling={filling} index={index} />
+            {fillings.length > 0 ? (
+              fillings.map((filling, index) => (
+                <div key={filling.uuid} className={styles.ingredientContainer}>
+                  <BurgerConstructorFilling filling={filling} index={index} />
+                </div>
+              ))
+            ) : (
+              <div className={styles.ingredientContainer}>
+                <div className={styles.fillingPlaceholderMiddle}>
+                  <p className="text_type_main-default">
+                    Перетащите сюда ингредиенты
+                  </p>
+                </div>
               </div>
-            ))}
+            )}
           </div>
 
-          {bun && (
+          {bun ? (
             <div className={styles.bunContainer}>
               <ConstructorElement
-                text={bun.name}
+                text={bun.name + " (низ)"}
                 thumbnail={bun.image}
                 price={bun.price}
                 type={"bottom"}
                 isLocked
               />
+            </div>
+          ) : (
+            <div className={styles.bunContainer}>
+              <div className={styles.fillingPlaceholderBottom}>
+                <p className="text_type_main-default">Перетащите сюда булку</p>
+              </div>
             </div>
           )}
         </div>
@@ -125,14 +144,15 @@ const BurgerConstructor: FC = () => {
             type="primary"
             size="medium"
             onClick={handleClick}
+            disabled={isOrderLoading || !bun || !fillings.length}
           >
             Оформить заказ
           </Button>
         </div>
       </section>
-      {isModalVisible && order?.order?.number && (
+      {isModalVisible && (
         <Modal onClose={handleClose}>
-          <OrderDetails orderId={order.order.number} />
+          <OrderDetails orderId={order?.order?.number} />
         </Modal>
       )}
     </>

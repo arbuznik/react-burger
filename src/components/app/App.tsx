@@ -14,10 +14,23 @@ import IngredientDetails from "../ingredient-details/IngredientDetails";
 import Modal from "../modal/Modal";
 import { resetActiveIngredient } from "../../services/slices/ingredient";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import Feed from "../../pages/feed/Feed";
+import OrdersPage from "../../pages/orders/OrdersPage";
+import {
+  fetchIngredients,
+  getIngredients,
+} from "../../services/slices/ingredients";
+import OrderPage from "../../pages/order/OrderPage";
+import { getActiveOrder } from "../../services/slices/feed";
+import UserOrderPage from "../../pages/user-order/UserOrderPage";
+import { getUserActiveOrder } from "../../services/slices/user-feed";
 
 export const App: FC = () => {
   const dispatch = useAppDispatch();
+  const order = useAppSelector(getActiveOrder);
+  const userOrder = useAppSelector(getUserActiveOrder);
   const user = useAppSelector(getCurrentUser);
+  const ingredients = useAppSelector(getIngredients);
   const navigate = useNavigate();
   const location = useLocation();
   const state = location.state;
@@ -27,6 +40,12 @@ export const App: FC = () => {
       dispatch(getUser());
     }
   }, [user, dispatch]);
+
+  useEffect(() => {
+    if (!ingredients.length) {
+      dispatch(fetchIngredients());
+    }
+  }, [dispatch, ingredients]);
 
   const handleClose = () => {
     navigate(-1);
@@ -41,6 +60,16 @@ export const App: FC = () => {
           <Route
             path="/profile"
             element={<ProtectedRoute element={<ProfilePage />} />}
+          ></Route>
+          <Route
+            path="/profile/orders"
+            element={<ProtectedRoute element={<OrdersPage />} />}
+          />
+          <Route
+            path="/profile/orders/:id"
+            element={
+              <ProtectedRoute element={<UserOrderPage outsideModal />} />
+            }
           />
           <Route
             path="/login"
@@ -62,6 +91,8 @@ export const App: FC = () => {
               <ProtectedRoute onlyUnAuth element={<ResetPasswordPage />} />
             }
           />
+          <Route path="/feed" element={<Feed />} />
+          <Route path="/feed/:id" element={<OrderPage outsideModal />} />
           <Route
             path="/ingredients/:id"
             element={<IngredientDetails outsideModal />}
@@ -78,6 +109,26 @@ export const App: FC = () => {
               <Modal onClose={handleClose} title="Детали ингредиента">
                 <IngredientDetails />
               </Modal>
+            }
+          />
+          <Route
+            path="/feed/:id"
+            element={
+              <Modal onClose={handleClose} title={order?.number}>
+                <OrderPage />
+              </Modal>
+            }
+          />
+          <Route
+            path="/profile/orders/:id"
+            element={
+              <ProtectedRoute
+                element={
+                  <Modal onClose={handleClose} title={userOrder?.number}>
+                    <UserOrderPage />
+                  </Modal>
+                }
+              />
             }
           />
         </Routes>

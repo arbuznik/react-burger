@@ -1,0 +1,20 @@
+.main {
+    display: grid;
+    grid-template-columns: 1fr 850px;
+    margin: 40px auto 0;
+    width: 1260px;
+    padding: 0 10px;
+    column-gap: 60px;
+}
+
+.menu {
+    margin-top: 140px;
+}
+
+.feed {
+    max-height: calc(100vh - 130px);
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    row-gap: 24px;
+}

@@ -55,5 +55,3 @@ export default ingredientsSlice.reducer;
 
 export const getIngredients = (state: RootState) =>
   state.ingredients.ingredients;
-export const getStarterBun = (state: RootState) =>
-  state.ingredients.ingredients.find((ingredient) => ingredient.type === "bun");

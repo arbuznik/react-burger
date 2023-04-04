@@ -1,12 +1,21 @@
 import React, { FC } from "react";
 import styles from "./OrderDetails.module.css";
 import checkmarkPath from "../../images/checkmark.svg";
+import { useAppSelector } from "../../hooks/hooks";
+import { getOrderIsLoading } from "../../services/slices/order";
+import Loader from "../loader/Loader";
 
 interface IOrderDetails {
-  orderId: number;
+  orderId?: number;
 }
 
 const OrderDetails: FC<IOrderDetails> = ({ orderId }) => {
+  const isOrderLoading = useAppSelector(getOrderIsLoading);
+
+  if (isOrderLoading) {
+    return <Loader />;
+  }
+
   return (
     <div className={styles.container}>
       <p className={"text text_type_digits-large mb-8"}>{orderId}</p>

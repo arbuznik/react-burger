@@ -62,10 +62,7 @@ const ingredientsConstructorSlice = createSlice({
       state.fillings.splice(dragIndex, 1);
       state.fillings.splice(hoverIndex, 0, dragFilling);
     },
-    resetConstructor: (state) => {
-      state.fillings = initialState.fillings;
-      state.counters = initialState.counters;
-    },
+    resetConstructor: () => initialState,
   },
 });
 

@@ -4,6 +4,10 @@ import orderReducer from "./slices/order";
 import ingredientReducer from "./slices/ingredient";
 import ingredientsConstructorReducer from "./slices/ingredients-constructor";
 import userReducer from "./slices/user";
+import feedReducer from "./slices/feed";
+import userFeedReducer from "./slices/user-feed";
+import { websocketMiddleware } from "./middlewares/websocketMiddleware";
+import { feedActions, userFeedActions } from "../utils/constants";
 
 const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
@@ -11,10 +15,17 @@ const rootReducer = combineReducers({
   ingredient: ingredientReducer,
   ingredientsConstructor: ingredientsConstructorReducer,
   user: userReducer,
-});
-export const store = configureStore({
-  reducer: rootReducer,
+  feed: feedReducer,
+  userFeed: userFeedReducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware()
+      .concat(websocketMiddleware(feedActions))
+      .concat(websocketMiddleware(userFeedActions)),
+});
+
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
