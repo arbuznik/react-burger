@@ -79,7 +79,11 @@ const BurgerConstructor: FC = () => {
   return (
     <>
       <section className={styles.constructorContainer}>
-        <div ref={dropTargetRef} className={styles.ingredientsContainer}>
+        <div
+          ref={dropTargetRef}
+          className={styles.ingredientsContainer}
+          data-cy={"ConstructorContainer"}
+        >
           {bun ? (
             <div className={styles.bunContainer}>
               <ConstructorElement

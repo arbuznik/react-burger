@@ -30,6 +30,7 @@ const BurgerIngredient: FC<IBurgerIngredientProps> = ({ ingredient }) => {
         <img
           ref={dragRef}
           className={styles.image}
+          data-cy={"BurgerIngredient"}
           src={ingredient.image}
           alt={ingredient.name}
         />

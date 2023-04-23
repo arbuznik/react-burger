@@ -98,6 +98,7 @@ const BurgerIngredients: FC = () => {
                     key={ingredient._id}
                     to={`/ingredients/${ingredient._id}`}
                     state={{ backgroundLocation: location }}
+                    data-cy={"IngredientLink"}
                   >
                     <BurgerIngredient ingredient={ingredient} />
                   </Link>

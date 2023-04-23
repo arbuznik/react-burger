@@ -1,10 +1,11 @@
 import reducer, {
   setActiveIngredient,
   resetActiveIngredient,
+  IIngredientState,
 } from "./ingredient";
 
 test("should set active ingredient", () => {
-  const initialState = {
+  const initialState: IIngredientState = {
     ingredient: null,
   };
 

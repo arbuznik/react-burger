@@ -5,30 +5,23 @@ import reducer, {
   IFeedState,
 } from "./feed";
 
+const initialState: IFeedState = {
+  orders: [],
+  activeOrder: null,
+  total: null,
+  totalToday: null,
+  error: null,
+  loading: false,
+};
+
 test("should return the initial state", () => {
-  expect(reducer(undefined, { type: undefined })).toEqual({
-    orders: [],
-    activeOrder: null,
-    total: null,
-    totalToday: null,
-    error: null,
-    loading: false,
-  });
+  expect(reducer(undefined, { type: undefined })).toEqual(initialState);
 });
 
 test("should handle orders add to feed", () => {
-  const previousState: IFeedState = {
-    orders: [],
-    activeOrder: null,
-    total: null,
-    totalToday: null,
-    error: null,
-    loading: false,
-  };
-
   expect(
     reducer(
-      previousState,
+      initialState,
       addFeedOrders({
         success: true,
         orders: [

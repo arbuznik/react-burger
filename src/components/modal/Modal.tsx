@@ -40,7 +40,11 @@ const Modal: FC<IModalProps> = ({ onClose, children, title }) => {
       <div className={styles.container}>
         <div className={styles.header}>
           {renderTitle && <p className={titleClassNames}>{renderTitle}</p>}
-          <button className={styles.button} onClick={onClose}>
+          <button
+            className={styles.button}
+            onClick={onClose}
+            data-cy={"ModalCloseButton"}
+          >
             <CloseIcon type={"primary"} />
           </button>
         </div>
