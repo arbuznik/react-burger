@@ -21,7 +21,7 @@ interface IIngredientsState {
   loading: boolean;
 }
 
-const initialState: IIngredientsState = {
+export const initialState: IIngredientsState = {
   ingredients: [],
   error: null,
   loading: false,

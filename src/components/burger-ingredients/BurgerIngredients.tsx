@@ -90,7 +90,7 @@ const BurgerIngredients: FC = () => {
             >
               {categoriesNames[category]}
             </h2>
-            <div className={styles.ingredientsContainer}>
+            <div className={styles.ingredientsContainer} data-cy={category}>
               {getIngredientsByCategory(ingredients, category).map(
                 (ingredient) => (
                   <Link
@@ -98,6 +98,7 @@ const BurgerIngredients: FC = () => {
                     key={ingredient._id}
                     to={`/ingredients/${ingredient._id}`}
                     state={{ backgroundLocation: location }}
+                    data-cy={"IngredientLink"}
                   >
                     <BurgerIngredient ingredient={ingredient} />
                   </Link>

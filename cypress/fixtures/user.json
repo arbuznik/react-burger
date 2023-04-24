@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "accessToken": "token",
+  "refreshToken": "token",
+  "user": {
+    "email": "arbyzov.nikita@yandex.ru",
+    "name": "nikita"
+  }
+}
