@@ -10,7 +10,7 @@ const HomePage: FC = () => {
     <DndProvider backend={HTML5Backend}>
       <main className={styles.main}>
         <h1 className={styles.title + " text text_type_main-large mt-10 mb-5"}>
-          Соберите бургер
+          Assemble your burger
         </h1>
         <BurgerIngredients />
         <BurgerConstructor />

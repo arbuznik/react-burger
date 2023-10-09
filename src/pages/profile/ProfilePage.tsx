@@ -58,26 +58,27 @@ const ProfilePage: FC = () => {
       <div>
         <ProfileMenu />
         <p className="text text_type_main-default text_color_inactive mt-20">
-          В этом разделе вы можете изменить свои персональные данные
+          In this section you can change your personal data
         </p>
       </div>
       <form className={styles.form} onSubmit={handleSubmit}>
         <Input
           value={name}
           name="name"
-          placeholder="Имя"
+          placeholder="Name"
           onChange={handleChange}
         />
         <Input
           value={email}
           name="email"
-          placeholder="Логин"
+          placeholder="Login"
           onChange={handleChange}
         />
         <PasswordInput
           value={password}
           name="password"
           onChange={handleChange}
+          placeholder="Password"
         />
         {error && (
           <p className="text text_type_main-default text_color_error">
@@ -87,9 +88,9 @@ const ProfilePage: FC = () => {
         {isEditMode && (
           <div className={styles.buttons}>
             <Button onClick={handleReset} htmlType="reset" type="secondary">
-              Отмена
+              Cancel
             </Button>
-            <Button htmlType="submit">Сохранить</Button>
+            <Button htmlType="submit">Save</Button>
           </div>
         )}
       </form>

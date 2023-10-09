@@ -95,7 +95,9 @@ const OrderPage: FC<IOrderPageProps> = ({ outsideModal }) => {
       >
         {orderStatuses[order.status]}
       </p>
-      <h2 className={clsx(styles.header, "text_type_main-medium")}>Состав:</h2>
+      <h2 className={clsx(styles.header, "text_type_main-medium")}>
+        Ingredients:
+      </h2>
       <div className={clsx(styles.ingredients, "mb-10")}>
         {uniqueOrderIngredients.map((ingredient) => (
           <div key={ingredient._id} className={styles.ingredient}>

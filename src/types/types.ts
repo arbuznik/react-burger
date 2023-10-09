@@ -80,9 +80,9 @@ export interface ICategoriesNames {
   [name: string]: string;
 }
 export interface IOrderStatuses {
-  done: "Выполнен";
-  pending: "Готовится";
-  created: "Создан";
+  done: "Ready";
+  pending: "Preparing";
+  created: "Created";
 }
 
 export interface IFillingDragIndexes {
@@ -127,4 +127,8 @@ export interface IWSActions {
   open: Function;
   close: Function;
   initSocket: Function;
+}
+
+export interface IIngredientsEnNamesMap {
+  [key: string]: string;
 }

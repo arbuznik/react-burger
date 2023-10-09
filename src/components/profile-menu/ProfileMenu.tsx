@@ -24,12 +24,12 @@ const ProfileMenu = () => {
       <ul>
         <li className={styles.profileLink}>
           <NavLink to="/profile" end className={linkClassName}>
-            Профиль
+            Profile
           </NavLink>
         </li>
         <li className={styles.profileLink}>
           <NavLink to="/profile/orders" end className={linkClassName}>
-            История заказов
+            Order history
           </NavLink>
         </li>
         <li className={styles.profileLink}>
@@ -37,7 +37,7 @@ const ProfileMenu = () => {
             className={clsx(styles.button, "text text_type_main-medium")}
             onClick={handleLogout}
           >
-            Выход
+            Logout
           </button>
         </li>
       </ul>

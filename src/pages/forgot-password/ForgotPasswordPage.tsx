@@ -36,13 +36,13 @@ const ForgotPasswordPage: FC = () => {
   return (
     <div>
       <main className={styles.main}>
-        <h1 className="text text_type_main-medium">Восстановление пароля</h1>
+        <h1 className="text text_type_main-medium">Password recovery</h1>
         <form className={styles.form} onSubmit={handleSubmit}>
           <EmailInput
             autoFocus
             value={email}
             name="email"
-            placeholder="Укажите e-mail"
+            placeholder="E-mail"
             onChange={handleChange}
           />
           {error && (
@@ -51,13 +51,13 @@ const ForgotPasswordPage: FC = () => {
             </p>
           )}
           <Button htmlType="submit" extraClass={styles.button}>
-            Восстановить
+            Restore
           </Button>
         </form>
         <p className={"text text_type_main-default text_color_inactive mt-15"}>
-          Вспомнили пароль?
+          Remember your password?
           <Link to="/login" className="text-link ml-2">
-            Войти
+            Log in
           </Link>
         </p>
       </main>

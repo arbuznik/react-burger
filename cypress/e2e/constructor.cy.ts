@@ -7,7 +7,7 @@ describe("constructor tests", () => {
   });
 
   it("should add ingredients, make order and close modal", () => {
-    cy.contains("Соберите бургер");
+    cy.contains("Assemble burger");
 
     cy.get("[data-cy=bun]")
       .find("[data-cy=BurgerIngredient]")
@@ -19,7 +19,7 @@ describe("constructor tests", () => {
       .first()
       .drag("[data-cy=ConstructorContainer]");
 
-    cy.get("button").contains("Оформить заказ").click();
+    cy.get("button").contains("Place order").click();
     cy.contains("1245").should("exist");
     cy.get("[data-cy=ModalCloseButton]").click();
     cy.contains("1245").should("not.exist");
@@ -27,14 +27,14 @@ describe("constructor tests", () => {
 
   it("should open ingredient modal", () => {
     cy.get("[data-cy=IngredientLink]").first().click();
-    cy.contains("Детали ингредиента").should("exist");
+    cy.contains("Filling details").should("exist");
   });
 
   it("should close ingredient modal", () => {
     cy.get("[data-cy=IngredientLink]").first().click();
-    cy.contains("Детали ингредиента").should("exist");
+    cy.contains("Filling details").should("exist");
     cy.get("[data-cy=ModalCloseButton]").click();
-    cy.contains("Детали ингредиента").should("not.exist");
+    cy.contains("Filling details").should("not.exist");
   });
 });
 

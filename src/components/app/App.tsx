@@ -106,7 +106,7 @@ export const App: FC = () => {
           <Route
             path="/ingredients/:id"
             element={
-              <Modal onClose={handleClose} title="Детали ингредиента">
+              <Modal onClose={handleClose} title="Ingredient details">
                 <IngredientDetails />
               </Modal>
             }

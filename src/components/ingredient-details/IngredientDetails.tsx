@@ -38,7 +38,7 @@ const IngredientDetails: FC<IIngredientDetailsProps> = ({ outsideModal }) => {
       })}
     >
       {outsideModal && (
-        <h1 className="text text_type_main-large">Детали ингредиента</h1>
+        <h1 className="text text_type_main-large">Filling details</h1>
       )}
       <img
         className={styles.image}
@@ -49,7 +49,7 @@ const IngredientDetails: FC<IIngredientDetailsProps> = ({ outsideModal }) => {
       <div className={styles.nutritions}>
         <div className={styles.nutrition}>
           <p className="text text_type_main-default text_color_inactive">
-            Калории,ккал
+            Calories, kcal
           </p>
           <p className="text text_type_digits-default text_color_inactive">
             {ingredient?.calories}
@@ -57,7 +57,7 @@ const IngredientDetails: FC<IIngredientDetailsProps> = ({ outsideModal }) => {
         </div>
         <div className={styles.nutrition}>
           <p className="text text_type_main-default text_color_inactive">
-            Белки, г
+            Protein, g
           </p>
           <p className="text text_type_digits-default text_color_inactive">
             {ingredient?.proteins}
@@ -65,7 +65,7 @@ const IngredientDetails: FC<IIngredientDetailsProps> = ({ outsideModal }) => {
         </div>
         <div className={styles.nutrition}>
           <p className="text text_type_main-default text_color_inactive">
-            Жиры, г
+            Fats, g
           </p>
           <p className="text text_type_digits-default text_color_inactive">
             {ingredient?.fat}
@@ -73,7 +73,7 @@ const IngredientDetails: FC<IIngredientDetailsProps> = ({ outsideModal }) => {
         </div>
         <div className={styles.nutrition}>
           <p className="text text_type_main-default text_color_inactive">
-            Углеводы, г
+            Carbohydrates, g
           </p>
           <p className="text text_type_digits-default text_color_inactive">
             {ingredient?.carbohydrates}

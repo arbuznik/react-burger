@@ -45,19 +45,19 @@ const ResetPasswordPage = () => {
   return (
     <div>
       <main className={styles.main}>
-        <h1 className="text text_type_main-medium">Восстановление пароля</h1>
+        <h1 className="text text_type_main-medium">Password recovery</h1>
         <form className={styles.form} onSubmit={handleSubmit}>
           <PasswordInput
             autoFocus
             value={password}
             name="password"
-            placeholder="Введите новый пароль"
+            placeholder="Enter a new password"
             onChange={handleChange}
           />
           <Input
             value={token}
             name="token"
-            placeholder="Введите код из письма"
+            placeholder="Enter the code from the email"
             onChange={handleChange}
           />
           {error && (
@@ -66,13 +66,13 @@ const ResetPasswordPage = () => {
             </p>
           )}
           <Button htmlType="submit" extraClass={styles.button}>
-            Сохранить
+            Save
           </Button>
         </form>
         <p className={"text text_type_main-default text_color_inactive mt-15"}>
-          Вспомнили пароль?
+          Remember password?
           <Link to="/login" className="text-link ml-2">
-            Войти
+            Login
           </Link>
         </p>
       </main>

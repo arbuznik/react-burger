@@ -87,7 +87,7 @@ const BurgerConstructor: FC = () => {
           {bun ? (
             <div className={styles.bunContainer}>
               <ConstructorElement
-                text={bun.name + " (верх)"}
+                text={bun.name + " (top)"}
                 thumbnail={bun.image}
                 price={bun.price}
                 type={"top"}
@@ -97,7 +97,7 @@ const BurgerConstructor: FC = () => {
           ) : (
             <div className={styles.bunContainer}>
               <div className={styles.fillingPlaceholderTop}>
-                <p className="text_type_main-default">Перетащите сюда булку</p>
+                <p className="text_type_main-default">Drag a bun over here</p>
               </div>
             </div>
           )}
@@ -113,7 +113,7 @@ const BurgerConstructor: FC = () => {
               <div className={styles.ingredientContainer}>
                 <div className={styles.fillingPlaceholderMiddle}>
                   <p className="text_type_main-default">
-                    Перетащите сюда ингредиенты
+                    Drag and drop fillings here
                   </p>
                 </div>
               </div>
@@ -123,7 +123,7 @@ const BurgerConstructor: FC = () => {
           {bun ? (
             <div className={styles.bunContainer}>
               <ConstructorElement
-                text={bun.name + " (низ)"}
+                text={bun.name + " (bottom)"}
                 thumbnail={bun.image}
                 price={bun.price}
                 type={"bottom"}
@@ -133,7 +133,7 @@ const BurgerConstructor: FC = () => {
           ) : (
             <div className={styles.bunContainer}>
               <div className={styles.fillingPlaceholderBottom}>
-                <p className="text_type_main-default">Перетащите сюда булку</p>
+                <p className="text_type_main-default">Drag a bun over here</p>
               </div>
             </div>
           )}
@@ -150,7 +150,7 @@ const BurgerConstructor: FC = () => {
             onClick={handleClick}
             disabled={isOrderLoading || !bun || !fillings.length}
           >
-            Оформить заказ
+            Place an order
           </Button>
         </div>
       </section>

@@ -26,7 +26,7 @@ const AppHeader: FC = () => {
                 {({ isActive }) => (
                   <>
                     <BurgerIcon type={isActive ? "primary" : "secondary"} />
-                    <p className="text text_type_main-default">Конструктор</p>
+                    <p className="text text_type_main-default">Constructor</p>
                   </>
                 )}
               </NavLink>
@@ -36,7 +36,7 @@ const AppHeader: FC = () => {
                 {({ isActive }) => (
                   <>
                     <ListIcon type={isActive ? "primary" : "secondary"} />
-                    <p className="text text_type_main-default">Лента заказов</p>
+                    <p className="text text_type_main-default">Order feed</p>
                   </>
                 )}
               </NavLink>
@@ -50,7 +50,7 @@ const AppHeader: FC = () => {
           {({ isActive }) => (
             <>
               <ProfileIcon type={isActive ? "primary" : "secondary"} />
-              <p className="text text_type_main-default">Личный кабинет</p>
+              <p className="text text_type_main-default">Personal account</p>
             </>
           )}
         </NavLink>
