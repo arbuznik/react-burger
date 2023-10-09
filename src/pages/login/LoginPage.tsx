@@ -26,7 +26,7 @@ const LoginPage = () => {
 
   return (
     <main className={styles.main}>
-      <h1 className="text text_type_main-medium">Вход</h1>
+      <h1 className="text text_type_main-medium">Welcome back!</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
         <EmailInput
           autoFocus
@@ -38,6 +38,7 @@ const LoginPage = () => {
           value={password}
           name="password"
           onChange={handleChange}
+          placeholder="Password"
         />
         {error && (
           <p className="text text_type_main-default text_color_error">
@@ -45,20 +46,20 @@ const LoginPage = () => {
           </p>
         )}
         <Button htmlType="submit" extraClass={styles.button}>
-          Войти
+          Log&nbsp;in
         </Button>
       </form>
       <div className={styles.links}>
         <p className="text text_type_main-default text_color_inactive">
-          Вы — новый пользователь?
+          Are you new to space burgers?
           <Link to="/register" className="text-link ml-2">
-            Зарегистрироваться
+            Register
           </Link>
         </p>
         <p className="text text_type_main-default text_color_inactive">
-          Забыли пароль?
+          Forgot your password?
           <Link to="/forgot-password" className="text-link ml-2">
-            Восстановить пароль
+            Restore password
           </Link>
         </p>
       </div>

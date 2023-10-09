@@ -28,20 +28,21 @@ const RegisterPage: FC = () => {
 
   return (
     <main className={styles.main}>
-      <h1 className="text text_type_main-medium">Регистрация</h1>
+      <h1 className="text text_type_main-medium">Registration</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
         <Input
           autoFocus
           value={name}
           name="name"
           onChange={handleChange}
-          placeholder="Имя"
+          placeholder="Name"
         />
         <EmailInput value={email} name="email" onChange={handleChange} />
         <PasswordInput
           value={password}
           name="password"
           onChange={handleChange}
+          placeholder="Password"
         />
         {error && (
           <p className="text text_type_main-default text_color_error">
@@ -49,13 +50,13 @@ const RegisterPage: FC = () => {
           </p>
         )}
         <Button htmlType="submit" extraClass={styles.button}>
-          Зарегистрироваться
+          Register
         </Button>
       </form>
       <p className={"text text_type_main-default text_color_inactive mt-15"}>
-        Уже зарегистрированы?
+        Already registered?
         <Link to="/login" className="text-link ml-2">
-          Войти
+          Login
         </Link>
       </p>
     </main>

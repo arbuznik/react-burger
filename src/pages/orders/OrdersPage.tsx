@@ -33,7 +33,7 @@ const OrdersPage: FC = () => {
     return (
       <main className={styles.main}>
         <p className="text text_type_main-default text_color_error">
-          Ошибка загрузки заказов
+          Error loading orders
         </p>
       </main>
     );
@@ -44,7 +44,7 @@ const OrdersPage: FC = () => {
       <div className={styles.menu}>
         <ProfileMenu />
         <p className="text text_type_main-default text_color_inactive mt-20">
-          В этом разделе вы можете просмотреть свою историю заказов
+          In this section you can view your order history
         </p>
       </div>
       <div className={styles.feed}>

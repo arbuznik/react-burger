@@ -7,6 +7,7 @@ import {
 import api from "../../utils/api";
 import { IIngredient } from "../../types/types";
 import { RootState } from "../store";
+import { ingredientsEnNamesMap } from "../../utils/constants";
 
 export const fetchIngredients = createAsyncThunk(
   "ingredients/fetch",
@@ -35,7 +36,12 @@ const ingredientsSlice = createSlice({
     builder.addCase(
       fetchIngredients.fulfilled,
       (state, { payload }: PayloadAction<IIngredient[]>) => {
-        state.ingredients = payload;
+        state.ingredients = payload.map((ingredient) => {
+          return {
+            ...ingredient,
+            name: ingredientsEnNamesMap[ingredient._id],
+          };
+        });
         state.loading = false;
       }
     );

@@ -47,7 +47,7 @@ const Feed: FC = () => {
   return (
     <main className={styles.main}>
       <h1 className={styles.title + " text text_type_main-large mt-10 mb-5"}>
-        Лента заказов
+        Order feed
       </h1>
       <section className={styles.feed}>
         {orders.map((order) => (
@@ -58,7 +58,7 @@ const Feed: FC = () => {
         <div className={styles.statuses}>
           <div className={styles.status}>
             <h4 className={clsx(styles.statusName, "text_type_main-medium")}>
-              Готовы:
+              Ready:
             </h4>
             <ul className={styles.numbers}>
               {doneOrders.map((order) => (
@@ -72,7 +72,7 @@ const Feed: FC = () => {
           </div>
           <div className={styles.status}>
             <h4 className={clsx(styles.statusName, "text_type_main-medium")}>
-              В работе:
+              Preparing:
             </h4>
             <ul className={styles.numbers}>
               {pendingOrders.map((order) => (
@@ -85,7 +85,7 @@ const Feed: FC = () => {
         </div>
         <div className={styles.infoSection}>
           <h4 className={clsx(styles.sectionHeader, "text_type_main-medium")}>
-            Выполнено за все время:
+            Cooked burgers since opening:
           </h4>
           <p className={clsx(styles.sectionValue, "text_type_digits-large")}>
             {totalOrders}
@@ -93,7 +93,7 @@ const Feed: FC = () => {
         </div>
         <div className={styles.infoSection}>
           <h4 className={clsx(styles.sectionHeader, "text_type_main-medium")}>
-            Выполнено за сегодня:
+            Cooked burgers today:
           </h4>
           <p className={clsx(styles.sectionValue, "text_type_digits-large")}>
             {totalTodayOrders}
